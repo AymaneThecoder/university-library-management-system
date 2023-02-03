@@ -1,0 +1,57 @@
+
+
+/* Navbar style */
+
+
+/* Logo */
+
+/* Navbar center */
+
+.navbar .navbar-nav .nav-item a.nav-link
+{
+  font-size: 18px;
+  position: relative;
+}
+.navbar .navbar-nav .nav-item :is(a.nav-link.active, a.nav-link:hover)
+{
+  color: var(--color-primary);
+}
+.navbar .navbar-nav .nav-item a.nav-link.active::before
+{
+  content: '';
+  position: absolute;
+  bottom: -5%;
+  left: calc(50% - 8px);
+  height: 3px;
+  width: 16px;
+  background-color: var(--color-primary);
+}
+.navbar .navbar-right .nav-item a.borrows-count
+{
+    transition: all .2s ease;
+}
+.navbar .navbar-right .nav-item a.borrows-count:hover
+{
+    font-weight: bold;
+}
+.navbar .navbar-right .nav-item :is(a.signup-btn,a.signin-btn)
+{
+    font-size: 15px;
+}
+.navbar .navbar-right .nav-item a.signin-btn
+{
+    background-color: var(--color-primary);
+}
+.navbar .navbar-right .nav-item a.signin-btn:hover
+{
+    background-color: green;
+}
+.navbar .navbar-right .nav-item a.signup-btn
+{
+    color: green;
+    border-color: var(--color-primary);
+}
+.navbar .navbar-right .nav-item a.signup-btn:hover
+{
+    background-color: lightgreen;
+}
