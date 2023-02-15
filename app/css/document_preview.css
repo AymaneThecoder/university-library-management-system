@@ -1,0 +1,32 @@
+section.document-preview
+{
+    margin-top: 5rem;
+}
+section.document-preview button.borrow-btn
+{
+    background-color: var(--secondary-color);
+    border: none;
+}
+section.document-preview button.borrow-btn:active
+{
+    background-color: rgb(3, 141, 3);
+}
+section.document-preview .document-container .cover
+{
+    width: 170px;
+    height: 230px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+}
+section.document-preview .document-container .cover > img
+{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+section.document-preview .description-container p.description
+{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+}
