@@ -90,3 +90,5 @@ function updateFilterBtns(filterText){
     btn.innerText.toLowerCase() == filterText ? btn.classList.add("active") : btn.classList.remove("active");
   })
 }
+
+

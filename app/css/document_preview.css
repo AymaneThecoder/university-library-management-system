@@ -1,3 +1,5 @@
+
+
 section.document-preview
 {
     margin-top: 5rem;
@@ -10,6 +12,17 @@ section.document-preview button.borrow-btn
 section.document-preview button.borrow-btn:active
 {
     background-color: rgb(3, 141, 3);
+}
+section.document-preview #borrowModal .modal-header .borrow-doc-title
+{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+section.document-preview #borrowModal .modal-body .borrow-message .borrow-tip
+{
+    color: darkred;
+    font-size: 14px;
 }
 section.document-preview .document-container .cover
 {

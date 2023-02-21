@@ -1,0 +1,185 @@
+/* Generale styles */
+/* ICONS */
+i
+{
+   font-size: 1.5rem !important;
+}
+
+/* Navbar style */
+
+.navbar .navbar-nav .nav-item a.nav-link
+{
+  font-size: 18px;
+  position: relative;
+}
+.navbar .navbar-nav .nav-item :is(a.nav-link.active, a.nav-link:hover)
+{
+  color: var(--color-primary);
+}
+.navbar .navbar-nav .nav-item a.nav-link.active::before
+{
+  content: '';
+  position: absolute;
+  bottom: -5%;
+  left: calc(50% - 8px);
+  height: 3px;
+  width: 16px;
+  background-color: var(--color-primary);
+}
+.navbar .navbar-right .nav-item a.borrows-count
+{
+    transition: all .2s ease;
+}
+.navbar .navbar-right .nav-item a.borrows-count:hover
+{
+    font-weight: bold;
+}
+.navbar .navbar-right .nav-item :is(a.signup-btn,a.signin-btn)
+{
+    font-size: 15px;
+}
+.navbar :is(a.signin-btn, a.signin-btn-dropdown)
+{
+    background-color: var(--color-primary);
+}
+.navbar .navbar-right .nav-item a.signin-btn:hover
+{
+    background-color: green;
+}
+.navbar :is(a.signup-btn,a.signup-btn-dropdown)
+{
+    color: green;
+    border-color: var(--color-primary);
+}
+.navbar :is(a.signup-btn,a.signup-btn-dropdown):hover
+{
+    background-color: lightgreen;
+}
+.navbar .account-dropdown .dropdown-item > a
+{
+    cursor: pointer;
+}
+
+/* Sticky navbar */
+
+.navbar
+{
+  box-shadow: 0 0 0px rgba(0, 0, 0, .2);
+  transition: box-shadow .5s ease;
+}
+.navbar.sticky-navbar
+{
+  box-shadow: 10px 0 20px rgba(0, 0, 0, .2);
+}
+
+/* Small screens navbar */
+
+.navbar-small-devices
+{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    width: 300px;
+    background-color: rgb(19, 18, 18);
+    padding-top: 5rem;
+    right: -100%;
+    transition: all .5s ease;
+}
+.navbar-small-devices.show
+{
+    right: 0;
+}
+.navbar-small-devices a.signin-btn
+{
+    background-color: var(--secondary-color);
+    border: none;
+}
+.navbar-small-devices a.signin-btn:active
+{
+    background-color: rgb(40, 216, 40);
+}
+.navbar-small-devices > a.borrows-count p
+{
+    color: white;
+    margin-left: 20px !important;
+}
+.navbar-small-devices > .navbar-nav a.nav-link
+{
+    color: white;
+    padding: 10px 0 10px 20px;
+    font-size: 1.1rem;
+}
+.navbar-small-devices > .navbar-nav li:not(:last-child, li:has(a.active)) a.nav-link
+{
+    border-bottom: 1px solid rgb(119, 119, 119);
+}
+.navbar-small-devices > .navbar-nav :is(a.nav-link.active, a.nav-link:hover)
+{
+    background-color: var(--secondary-color);
+}
+.navbar-small-devices > a.navbar-brand
+{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    transition: all .3s ease;
+}
+.navbar-small-devices > a.navbar-brand:hover
+{
+    opacity: 50%;
+}
+
+/* sliding navbar control buttons */
+
+button.slide-navbar-toggler-btn i,
+button.slide-navbar-close-btn i
+{
+    font-size: 2rem;
+}
+button.slide-navbar-close-btn
+{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+button.slide-navbar-close-btn:active
+{
+    outline: 1px solid white;
+}
+button.slide-navbar-close-btn i
+{
+    color: white;
+}
+
+/* Media query for navbar */
+
+/* Login dropdown tablet devices */
+
+@media screen and (max-width: 995px)
+{
+  .navbar :is(.navbar-right:not(footer .navbar-right))
+  {
+    display: none;
+  }
+  .navbar .login-dropdown
+  {
+    display: block !important;
+  }
+}
+
+/* Login dropdown phone devices */
+
+@media screen and (max-width: 767px)
+{
+  .navbar :is(.navbar-center, .login-dropdown, .account-dropdown)
+  {
+    display: none !important;
+  }
+  .navbar .slide-navbar-toggler-btn
+  {
+    display: block !important;
+  }
+}
