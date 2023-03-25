@@ -1,0 +1,50 @@
+
+
+/* Hero section */
+
+.hero-section .left p.document-type
+{
+    font-size: 1.5rem;
+    color: rgb(177, 177, 177);
+}
+.hero-section .search-documents-container
+{
+  min-width: 400px;
+}
+.hero-section .search-documents-container input.search-input
+{
+  outline: none;
+  border: none;
+}
+.hero-section .search-documents-container :is(input.search-input, button.search-btn)
+{
+  background-color: rgb(231, 231, 231);
+}
+.hero-section .search-documents-container input.search-input
+{
+  box-shadow: none;
+}
+.hero-section .search-documents-container button.search-btn i
+{
+  font-size: 1rem;
+  background-color: black;
+  color: white;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+/* Fixed search input when scrolling */
+.search-documents-container.fixe
+{
+  position: fixed;
+  top: 100px;
+  z-index: 99;
+}
+
+
+/* Documents section */
+
+.documents-showcase-section ul.documents
+{
+    margin-top: 4rem !important;
+}

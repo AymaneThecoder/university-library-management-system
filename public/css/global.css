@@ -1,0 +1,39 @@
+
+
+/* Documents */
+.documents-showcase-section ul.documents li.document
+{
+    transition: all .5s ease;
+}
+.documents-showcase-section ul.documents li.document:hover
+{
+    transform: translateY(-3%);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, .1);
+}
+.documents-showcase-section ul.documents li.document p.title
+{
+    font-size: 1.1rem;
+    margin-bottom: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.documents-showcase-section ul.documents li.document p.author
+{
+    font-size: .9rem;
+    color: grey;
+}
+
+/* Cover image */
+ul.documents li.document .cover
+{
+    width: 170px;
+    height: 230px;
+}
+.documents-showcase-section ul.documents li.document .cover > img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

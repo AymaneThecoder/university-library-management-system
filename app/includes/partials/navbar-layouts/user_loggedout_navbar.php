@@ -2,9 +2,8 @@
 
         <nav class="navbar navbar-expand sticky-top bg-white">
             <div class="container py-2 px-3 px-sm-0">
-
                        <!-- LOGO -->
-                   <a class="navbar-brand" href="booksExploreView.html">
+                   <a class="navbar-brand" href="http://localhost/management-of-library/app/View/home.php">
                        <h2>jaliss</h2>
                    </a>
                    <ul class="navbar-nav navbar-center column-gap-5">
@@ -21,17 +20,26 @@
                            <a href="#" class="nav-link">Periodiques</a>
                        </li>
                    </ul>
+                   <ul class="navbar-nav navbar-right align-items-center column-gap-2">
+                       <li class="nav-item">
+                            <a class="signup-btn btn btn-lg  btn-outline-secondary">Creer votre compte</a>
+                       </li>
+                       <li class="nav-item">
+                            <a class="signin-btn btn btn-lg btn-primary">Se connecter</a>
+                       </li>
+                   </ul>
 
-                   <div class="account-dropdown dropdown">
+                   <!--Navbar right Dropdown for smaller devices -->
+                   <div class="login-dropdown dropdown d-none">
                        <button class="btn dropdown-toggle" data-bs-toggle="dropdown">
                            <i class="fa fa-user"></i>
                        </button>
                        <div class="dropdown-menu dropdown-menu-end">
                            <li class="dropdown-item">
-                               <a class="borrows-btn text-dark text-decoration-none">Mes empruntes</a>
+                               <a class="signup-btn-dropdown btn btn-outline-secondary w-100">Creer votre compte</a>
                            </li>
                            <li class="dropdown-item">
-                               <a class="logout-btn text-dark text-decoration-none">Mon compte</a>
+                               <a class="signin-btn-dropdown btn btn-primary w-100">Se connecter</a>
                            </li>
                        </div>
                    </div>

@@ -3,6 +3,7 @@
 section.document-preview
 {
     margin-top: 5rem;
+    margin-bottom: 7rem;
 }
 section.document-preview button.borrow-btn
 {
@@ -21,7 +22,6 @@ section.document-preview #borrowModal .modal-header .borrow-doc-title
 }
 section.document-preview #borrowModal .modal-body .borrow-message .borrow-tip
 {
-    color: darkred;
     font-size: 14px;
 }
 section.document-preview .document-container .cover
