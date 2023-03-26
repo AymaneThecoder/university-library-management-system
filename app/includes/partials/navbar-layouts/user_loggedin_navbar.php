@@ -3,7 +3,7 @@
             <div class="container py-2 px-3 px-sm-0">
 
                        <!-- LOGO -->
-                   <a class="navbar-brand" href="http://localhost/management-of-library/app/View/home.php">
+                   <a class="navbar-brand" href="home.php">
                        <h2>jaliss</h2>
                    </a>
                    <ul class="navbar-nav navbar-center column-gap-5">

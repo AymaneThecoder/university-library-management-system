@@ -17,7 +17,7 @@ $('#borrowBtn').click(function (){
      $('#borrowModal .modal-body').html(`<h5 class='text-center text-danger'>${data.borrowError}</h5>`);
    } else {
     $('#borrowModal .modal-body').html(`
-    <h3 class='text-center'>Votre code d'emprunte est <span class='text-primary'>${data.borrowCode}</span></h3>
+    <h4 class='text-center'>Votre code d'emprunte est <span class='text-primary'>${data.borrowCode}</span></h4>
     <p class='text-danger'>Note: vous devez retoruner le document avant le ${data.returnDate}</p>`
     )
    }

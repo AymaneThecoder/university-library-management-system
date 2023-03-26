@@ -3,7 +3,7 @@
         <nav class="navbar navbar-expand sticky-top bg-white">
             <div class="container py-2 px-3 px-sm-0">
                        <!-- LOGO -->
-                   <a class="navbar-brand" href="http://localhost/management-of-library/app/View/home.php">
+                   <a class="navbar-brand" href="home.php">
                        <h2>jaliss</h2>
                    </a>
                    <ul class="navbar-nav navbar-center column-gap-5">
@@ -22,10 +22,10 @@
                    </ul>
                    <ul class="navbar-nav navbar-right align-items-center column-gap-2">
                        <li class="nav-item">
-                            <a class="signup-btn btn btn-lg  btn-outline-secondary">Creer votre compte</a>
+                            <a href="signup.php" class="signup-btn btn btn-lg  btn-outline-secondary">Creer votre compte</a>
                        </li>
                        <li class="nav-item">
-                            <a class="signin-btn btn btn-lg btn-primary">Se connecter</a>
+                            <a href="login.php" class="signin-btn btn btn-lg btn-primary">Se connecter</a>
                        </li>
                    </ul>
 

@@ -96,7 +96,7 @@
 			return "Le mot de passe est incorrecte!";
 		}else{
 		    session_start();
-			$_SESSION["userId"] = $user['userId'];
+			$_SESSION["user_id"] = $user['userId'];
 			header("location: home.php");
 			exit();
 		}
