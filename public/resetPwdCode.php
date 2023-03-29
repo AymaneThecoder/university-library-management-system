@@ -1,6 +1,7 @@
 <?php 
 session_start();
 	require_once "../app/includes/logic/user.php";
+	require_once "../app/includes/logic/helpers.php";
 
     $response = '';
 	if(isset($_POST['verifyCode'])){
@@ -10,6 +11,7 @@ session_start();
 // Header
 
 require_once '../app/includes/partials/header.php';
+
 ?>
 </head>
 <body class="light-gray">

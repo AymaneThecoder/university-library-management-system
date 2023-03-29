@@ -8,7 +8,12 @@
 	require dirname(__DIR__) . "./data/user.php";
 	require dirname(__DIR__) . '/../../vendor/autoload.php';
 
+
+	// Database connection
 	$conn = getConnection();
+
+	// Max live time for OTP reset password code in seconds
+	define('MAX_OTP_LIVE_TIME', 60 * 5);
 
     // SIGNUP
 
@@ -109,8 +114,9 @@
 	// Logout
 
 	function logoutUser(){
+		session_unset();
 		session_destroy();
-		header("location: login.php");
+		header("location: home.php");
 		exit();
 	}
 
@@ -149,7 +155,7 @@
 	$mail->Password = "password";
 	$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 	$mail->Port = 587;
-	$mail->setFrom('email');
+	$mail->setFrom('username');
 	$mail->addAddress($to);
 	$mail->Subject = 'Reinitialisation du mot de passe';
 	$mail->isHTML(true);
@@ -162,6 +168,10 @@
 
     //  Store the reset code 
 	$_SESSION['reset_code'] = $code;
+    
+	// Set the last_activity session variable, Wich will be used
+	// To check if the OTP code has been expired
+	$_SESSION['last_activity'] = time();
 
 	redirect('resetPwdCode');
 
@@ -170,13 +180,21 @@
 	// Verify password reset code
 
 	function verifyPwdResetCode($data){
-		$userResetCode = htmlspecialchars(trim($data['reset_code']));
-		$appResetCode = $_SESSION['reset_code'];
 
-		if($userResetCode != $appResetCode)
+        // Clear the OTP code if it's expired
+		if(isset($_SESSION['reset_code']))
 		{
-			return 'Reset code is not valid!';
+			clearSessVarIfTimedOut('reset_code', MAX_OTP_LIVE_TIME);
 		}
+
+		$userResetCode = htmlspecialchars(trim($data['reset_code']));
+		$appResetCode = $_SESSION['reset_code'] ?? null;
+
+		if(!$appResetCode || $userResetCode != $appResetCode)
+		{
+			return 'Le code n\'est pas valid!';
+		}
+
 
 		redirect('newPassword');
 	}

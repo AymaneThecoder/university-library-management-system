@@ -17,8 +17,8 @@ require_once '../app/includes/partials/header.php';
     <form class="form" action="" method="post">
         <h5>Choisi votre nouvelle mot de passe</h5>
         <p class="text-danger"><?= $response ?></p>
-      <input type="password" name="pwd" id="" class="form-control w-75 mb-3" placeholder="Password">
-      <input type="password" name="re_pwd" id="" class="form-control w-75 mb-3" placeholder="Repeat password">
+      <input type="password" name="pwd" id="" class="form-control w-75 mb-3" placeholder="Mot de passe">
+      <input type="password" name="re_pwd" id="" class="form-control w-75 mb-3" placeholder="Confirmer le mot de passe">
       <button type="submit" name="changePwd" class="btn btn-primary">Changer le mot de passe</button>
     </form>
 </div>
