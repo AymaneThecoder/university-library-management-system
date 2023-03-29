@@ -27,18 +27,29 @@ function addUser($fullName, $email, $majorId, $password){
 
 function getUserByIDOrEmail($findBy){
         global $conn;
-        $sql = '';
-
-        if(strpos($findBy, '@'))
-        {
-         $sql = 'select * from users where email = ?';
-        } else {
-         $sql = 'select * from users where userId = ?';
-        }
-
+        $sql = 'select * from users where userId = ? OR email = ?';
         $query = $conn->prepare($sql);
         $query->bindParam(1, $findBy);
+        $query->bindParam(2, $findBy);
         $query->execute();
         $user = $query->fetchAll(PDO::FETCH_ASSOC);
         return !empty($user) ? $user[0] : null;
+}
+
+function updateUser($newUser){
+        global $conn;
+
+        // Update all the attributes of the user
+        $sql = 'update users set fullName = ?, email = ?, majorId = ?, borrows_left = ?, password = ?
+        where userId = ?';
+        
+        $query = $conn->prepare($sql);
+        $query->bindParam(1, $newUser['fullName']);
+        $query->bindParam(2, $newUser['email']);
+        $query->bindParam(3, $newUser['majorId']);
+        $query->bindParam(4, $newUser['borrows_left']);
+        $query->bindParam(5, $newUser['password']);
+        $query->bindParam(6, $newUser['userId']);
+
+        $query->execute();
 }

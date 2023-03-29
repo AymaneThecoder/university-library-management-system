@@ -28,7 +28,7 @@ require_once '../app/includes/partials/header.php';
                           <p class="error" style="color:red ;"><?php echo @$response; ?></p>
                             <div class="form-group">
                                 <label for="your_name"><i class="fa fa-user"></i></label>
-                                <input type="text"  id="your_name" placeholder="Your email" name="email" value="<?php echo @$_POST['email']; ?>"/>
+                                <input type="text"  id="your_name" placeholder="Email" name="email" value="<?php echo @$_POST['email']; ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="your_pass"><i class="fa fa-lock"></i></label>
@@ -41,15 +41,15 @@ require_once '../app/includes/partials/header.php';
                             <div class="form-group form-button">
                                 <input type="submit" name="submit"  class="form-submit"  value="Login"/>
                             </div>
-                            <a href="forgot-ur-pass.php" class="signup-image-link">Oublie mot de passe</a>
-                        </form>
-                        
+                            <a href="forgotPassword.php" class="signup-image-link">Oublie mot de passe</a>
+                            
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-    </div> 
+            </section>
+            
+        </div> 
+    </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 <script src="vendor/jquery/jquery.min.js"></script>

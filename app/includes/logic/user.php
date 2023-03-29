@@ -1,7 +1,12 @@
 <?php 
 
+	use PHPMailer\PHPMailer\PHPMailer;
+	use PHPMailer\PHPMailer\Exception;
+
 	require dirname(__DIR__) . "/../config/db.php";
+	require "helpers.php";
 	require dirname(__DIR__) . "./data/user.php";
+	require dirname(__DIR__) . '/../../vendor/autoload.php';
 
 	$conn = getConnection();
 
@@ -97,10 +102,11 @@
 		}else{
 		    session_start();
 			$_SESSION["user_id"] = $user['userId'];
-			header("location: home.php");
-			exit();
+			redirect('home');
 		}
 	}
+
+	// Logout
 
 	function logoutUser(){
 		session_destroy();
@@ -108,49 +114,99 @@
 		exit();
 	}
 
-	function passwordReset($email){
-		global $conn;
-		$connect = $conn;
-		$email = trim($email);
+	// Send reset password code
 
-		if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-			return "Email is not valid";
+	function sendResetPwdCode($data) {
+     $email = htmlspecialchars(trim($data['email']));
+
+	 if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+		return "Email n'est pas valid";
+	}
+    
+	$result = getUserByIDOrEmail($email);
+	
+
+	if(!$result)
+	{
+		return 'Il n\'existe aucun compte avec cette email'; 
+	}
+
+	// Store userId
+	$_SESSION['user_id'] = $result['userId'];
+
+	// Send the code
+	$str = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz";
+	$code = substr(str_shuffle($str), 0, 8);
+
+	$to = $email; 
+    $body = "Votre code de reinitialisation est <b>$code</b>";
+
+	$mail = new PHPMailer();
+	$mail->isSMTP();
+	$mail->Host = "smtp.gmail.com";
+	$mail->SMTPAuth = true;
+	$mail->Username = "username";
+	$mail->Password = "password";
+	$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+	$mail->Port = 587;
+	$mail->setFrom('email');
+	$mail->addAddress($to);
+	$mail->Subject = 'Reinitialisation du mot de passe';
+	$mail->isHTML(true);
+	$mail->Body = $body;
+
+	if(!$mail->send())
+	{
+		return 'Erreur lors d\'envoi du email!';
+	}
+
+    //  Store the reset code 
+	$_SESSION['reset_code'] = $code;
+
+	redirect('resetPwdCode');
+
+	}
+
+	// Verify password reset code
+
+	function verifyPwdResetCode($data){
+		$userResetCode = htmlspecialchars(trim($data['reset_code']));
+		$appResetCode = $_SESSION['reset_code'];
+
+		if($userResetCode != $appResetCode)
+		{
+			return 'Reset code is not valid!';
 		}
 
-		$stmt = $connect->prepare("SELECT email FROM adherent WHERE email = ?");
-		$stmt->bindParam("s", $email);
-		$stmt->execute();
-		$result = $stmt->fetchAll();
+		redirect('newPassword');
+	}
 
-		if($result == NULL){
-			return "Email doesn't exist in the database";
-		}
+	// Change password for resetting
 
-		$str = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz";
-		$password_length = 7;
-		$new_pass = substr(str_shuffle($str), 0, $password_length);
-		
-		$hashed_password = password_hash($new_pass, PASSWORD_DEFAULT);
+	function changePassword($data){
+     $password = htmlspecialchars(trim($data['pwd']));
+     $re_password = htmlspecialchars(trim($data['re_pwd']));
 
-		$stmt = $connect->prepare("UPDATE adherent SET password = ? WHERE email = ?");
-		$stmt->bindParam("ss", $hashed_password, $email);
-		$stmt->execute();
+	 if($password != $re_password)
+	 {
+		return 'Mot de passe ne match pas!';
+	 }
 
-		$to = $email; 
-		$subject = "Password recovery"; 
-		$body = "You can log in with your new password". "\r\n";
-		$body .= $new_pass; 
+	 if(strlen($password) < 8)
+	 {
+		return 'Le mot de passe doit etre au moins 8 characteres';
+	 }
 
-		$headers = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-		$headers .= "From: aymanemltr@gmail.com \r\n";
+	 $userId = $_SESSION['user_id'];
+	 $user = getUserByIDOrEmail($userId);
+	 $user['password'] = $password;
 
-		$send = mail($to, $subject, $body, $headers); 
-		if(!$send){ 
-			return "Email not send. Please try again";
-		}else{
-			return "success";
-		}
+	//  Hash the password
+	$user['password'] = password_hash($user['password'], PASSWORD_DEFAULT);
+
+	 updateUser($user);
+
+	 redirect('login');
 	}
 
 	function deleteAccount(){
