@@ -18,57 +18,59 @@
     // SIGNUP
 
 	function registerUser($data){
-		global $conn;
-		$fillable = array('email', 'full_name', 'password', 'major');
+
+		//Sanitize data
+		sanitizeUserData($data);
+
+		// Validate user data
+
+		$validationResponse = validateUserData($data, [
+			'full_name' => ['required', 'fullName'],
+			'email' => ['required', 'email'],
+			'major' => ['required'],
+			'password' => ['required', 'min:8'],
+			'confirm_password' => ['required', 'confirmed']
+		]);
 		
+		// There is error in form
+
+		if($validationResponse != 'validated')
+		{
+			return $validationResponse;
+		}
+
+				
 		foreach($data as $key => $value)
 		{
-			if(in_array($key, $fillable))
-			{
-				$$key = htmlspecialchars(trim($value));
-			}
+			$$key = htmlspecialchars(trim($value));
 		}
 
-		$confirm_password = $data['confirm_password'];
+		// Check if the email is already taken 
 
-        // Check for empty fields
-		foreach($fillable as $key) {
-			if(empty($data[$key]) || empty($confirm_password) || str_starts_with($major, 'choisi')){
-				return "Tous les champs sont obligatoires";
-			}
-		}
+		$user = getUserByIDOrEmail($email);
 
-		// Check for valid fullNam
-
-		if(!strpos($full_name, ' '))
-		{
-			return 'Le nom doit etre complet!';
-		}
-
-		// Check for valid email
-		if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-			return "Email n'est pas valid!";
-		}
-
-		// Check for already taken email
-		$result = getUserByIDOrEmail($email);
-
-		if($result != NULL){
-			return "Email d'utilisateur deja existe";
-		}
-
-		if(strlen($password) < 8){
-			return "Mot de passe trop court!";
-		}
-
-		if($password != $confirm_password){
-			return "Confirmation mot de passe incorrecte!";
-		}
+        if($user != NULL){
+            return "Email d'utilisateur deja existe";
+        }
 
 		// Hash the password
 		$hashedPwd = password_hash($password, PASSWORD_DEFAULT);
 
 		addUser($full_name, $email, $major, $hashedPwd);
+
+		redirect('login');
+	}
+
+
+	// Update user informations
+
+	function updateUserData($data){
+
+		foreach($data as $key => $value)
+		{
+			$$key = htmlspecialchars(trim($value));
+		}
+
 	}
 
 
@@ -76,23 +78,24 @@
 
 	function loginUser($data){
 
-		foreach($data as $key => $value)
+		// Sanitize data
+		sanitizeUserData($data);
+
+		// Validate user data
+
+		$response = validateUserData($data, [
+			'email' => ['required', 'email'],
+			'password' => ['required']
+		]);
+
+		foreach($data as $input => $value)
 		{
-			$$key = htmlspecialchars(trim($value));
+			$$input = $value;
 		}
 
-		// Check for empty fields
-		if($email == "" || $password == ""){
-			return "Les deux champs sont obligatoire!";
-		}
-
-		
-		$email = filter_var($email, FILTER_VALIDATE_EMAIL);
-
-		// Check for invalid email
-		if(!$email)
+		if($response != 'validated')
 		{
-			return "Email doit etre valid!";
+			return $response;
 		}
 
 	    $user = getUserByIDOrEmail($email);
@@ -125,20 +128,22 @@
 	function sendResetPwdCode($data) {
      $email = htmlspecialchars(trim($data['email']));
 
-	 if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-		return "Email n'est pas valid";
+    $response =  validateUserData($data, []);
+	if($response != 'validated')
+	{
+		return $response;
 	}
-    
-	$result = getUserByIDOrEmail($email);
+
+	$user = getUserByIDOrEmail($email);
 	
 
-	if(!$result)
+	if(!$user)
 	{
 		return 'Il n\'existe aucun compte avec cette email'; 
 	}
 
 	// Store userId
-	$_SESSION['user_id'] = $result['userId'];
+	$_SESSION['user_id'] = $user['userId'];
 
 	// Send the code
 	$str = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz";
@@ -202,25 +207,20 @@
 	// Change password for resetting
 
 	function changePassword($data){
-     $password = htmlspecialchars(trim($data['pwd']));
-     $re_password = htmlspecialchars(trim($data['re_pwd']));
+     $password = htmlspecialchars(trim($data['password']));
 
-	 if($password != $re_password)
-	 {
-		return 'Mot de passe ne match pas!';
-	 }
+	 $response = validateUserData($data, []);
 
-	 if(strlen($password) < 8)
+	 if($response != 'validated')
 	 {
-		return 'Le mot de passe doit etre au moins 8 characteres';
+		return $response;
 	 }
 
 	 $userId = $_SESSION['user_id'];
 	 $user = getUserByIDOrEmail($userId);
-	 $user['password'] = $password;
-
+	 
 	//  Hash the password
-	$user['password'] = password_hash($user['password'], PASSWORD_DEFAULT);
+	$user['password'] = password_hash($password, PASSWORD_DEFAULT);
 
 	 updateUser($user);
 

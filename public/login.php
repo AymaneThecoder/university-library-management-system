@@ -1,6 +1,7 @@
 <?php 
 	require_once "../app/includes/logic/user.php";
 	if(isset($_POST['submit'])){
+        unset($_POST['submit']);
 		$response = loginUser($_POST);
 	}
 

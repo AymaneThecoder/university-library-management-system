@@ -4,6 +4,7 @@ session_start();
 
     $response = '';
 	if(isset($_POST['sendMeCode'])){
+        unset($_POST['sendMeCode']);
 		$response = sendResetPwdCode($_POST);
 	}
 

@@ -30,7 +30,7 @@
                                <a class="borrows-btn text-dark text-decoration-none">Mes empruntes</a>
                            </li>
                            <li class="dropdown-item">
-                               <a class="logout-btn text-dark text-decoration-none">Mon compte</a>
+                               <a href="account.php" class="logout-btn text-dark text-decoration-none">Mon compte</a>
                            </li>
                            <li class="dropdown-item">
                                <a href="logout.php" class="logout-btn text-dark text-decoration-none">Se deconnecter</a>

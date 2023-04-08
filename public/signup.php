@@ -2,6 +2,7 @@
 	require_once "../app/includes/logic/user.php";
 	require_once "../app/includes/data/major.php";
 	if(isset($_POST['submit'])){
+        unset($_POST['submit']);
 		$response = registerUser($_POST);
 	}
 
@@ -29,7 +30,7 @@ require_once '../app/includes/partials/header.php';
                             </div>
                             <div class="form-group">
                                 <label for="email"><i class="fa fa-envelope"></i></label>
-                                <input type="email" name="email" id="email" placeholder="Email" value="<?php echo @$_POST['email']; ?>"  />
+                                <input type="text" name="email" id="email" placeholder="Email" value="<?php echo @$_POST['email']; ?>"  />
                             </div>
                             <div class="form-group">
                                 <label for="name d-none"><i class="fa fa-graduation-cap"></i></label>
@@ -56,7 +57,7 @@ require_once '../app/includes/partials/header.php';
                             </div>
                             <div class="form-group">
                                 <label for="re-pass"><i class="fa fa-lock"></i></label>
-                                <input type="password"  id="re_pass" placeholder="Repeter mot de passe" name="confirm_password" value="<?php echo @$_POST['confirm-password']; ?>" />
+                                <input type="password"  id="re_pass" placeholder="Repeter mot de passe" name="confirm_password" value="" />
                             </div>
 
                             <div class="form-group form-button">
@@ -76,5 +77,5 @@ require_once '../app/includes/partials/header.php';
      
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="js/main.js"></script>
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</body>
 </html>
