@@ -3,7 +3,7 @@
 	require_once "../app/includes/data/major.php";
 	if(isset($_POST['submit'])){
         unset($_POST['submit']);
-		$response = registerUser($_POST);
+		$response = registerUser($_POST, 'insert');
 	}
 
 // Header

@@ -128,9 +128,10 @@ function checkRule($inputName, $value, $rule){
 		// Password confirmation
 
 		case 'confirmed': {
-			if($value != $_POST['password'])
+			$password = htmlspecialchars($_POST['password']);
+			if($value != $password)
 			{
-				return 'Les mot de passes ne ne sont pas authentique!';
+				return 'Les mot de passes ne sont pas authentique!';
 			}
 		} break;
 	}

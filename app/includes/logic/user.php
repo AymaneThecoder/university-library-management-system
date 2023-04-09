@@ -15,7 +15,9 @@
 	// Max live time for OTP reset password code in seconds
 	define('MAX_OTP_LIVE_TIME', 60 * 5);
 
-    // SIGNUP
+
+
+    // This is for signup new user and modify account information
 
 	function registerUser($data){
 
@@ -39,38 +41,21 @@
 			return $validationResponse;
 		}
 
-				
-		foreach($data as $key => $value)
-		{
-			$$key = htmlspecialchars(trim($value));
-		}
-
 		// Check if the email is already taken 
 
-		$user = getUserByIDOrEmail($email);
+		$user = getUserByIDOrEmail($data['email']);
 
-        if($user != NULL){
-            return "Email d'utilisateur deja existe";
+        if($user != NULL)
+		{
+            return "Email deja existe";
         }
 
 		// Hash the password
-		$hashedPwd = password_hash($password, PASSWORD_DEFAULT);
+		$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
-		addUser($full_name, $email, $major, $hashedPwd);
+		addUser($data);
 
 		redirect('login');
-	}
-
-
-	// Update user informations
-
-	function updateUserData($data){
-
-		foreach($data as $key => $value)
-		{
-			$$key = htmlspecialchars(trim($value));
-		}
-
 	}
 
 
@@ -88,30 +73,71 @@
 			'password' => ['required']
 		]);
 
-		foreach($data as $input => $value)
-		{
-			$$input = $value;
-		}
-
 		if($response != 'validated')
 		{
 			return $response;
 		}
 
-	    $user = getUserByIDOrEmail($email);
+	    $user = getUserByIDOrEmail($data['email']);
    
 		// Check for invalid login
 		if($user == NULL){
 			return "erreur dans email ou password";
 		}
 
-		if(!password_verify($password, $user['password'])){
+		if(!password_verify($data['password'], $user['password'])){
 			return "Le mot de passe est incorrecte!";
 		}else{
 		    session_start();
 			$_SESSION["user_id"] = $user['userId'];
 			redirect('home');
 		}
+	}
+
+
+	// Update user information
+
+	function modifyUserAccountInfo($data){
+
+		//Sanitize data
+		sanitizeUserData($data);
+
+		// Validate user data
+
+		$validationResponse = validateUserData($data, [
+			'full_name' => ['required', 'fullName'],
+			'email' => ['required', 'email'],
+			'major' => ['required'],
+			'password' => ['required', 'min:8'],
+			'confirm_password' => ['required', 'confirmed']
+		]);
+		
+		// There is error in form
+
+		if($validationResponse != 'validated')
+		{
+			return $validationResponse;
+		}
+
+		// Check if the email is already taken 
+		$currentUser = getUserByIDOrEmail($_SESSION['user_id']);
+		$user = getUserByIDOrEmail($data['email']);
+
+        if($user != NULL && $user['email'] != $currentUser['email'])
+		{
+            return "Email deja existe";
+        }
+
+		// Hash the password
+		$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+		$data['user_id'] = $_SESSION['user_id'];
+
+		updateUser($data);
+
+		//Set the success message
+        $_SESSION['profile_modified'] = true;
+		
+		redirect('login');
 	}
 
 	// Logout

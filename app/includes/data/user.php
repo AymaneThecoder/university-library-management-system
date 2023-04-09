@@ -5,23 +5,25 @@ require_once dirname(__DIR__) . '/../config/db.php';
 
 $conn = getConnection();
 
+// Max borrows per user
+define('MAX_BORROWS', 3);
 
-function addUser($fullName, $email, $majorId, $password){
+//Insert/update a user
+
+function addUser($data){
         global $conn;
 
-        // Max borrows per user
-        define('MAX_BORROWS', 3);
-
         $sql = 'insert into users values (?, ?, ?, ?, ?, ?)';
+
         $query = $conn->prepare($sql);
         $id = null;
         $maxBorrows = MAX_BORROWS;
         $query->bindParam(1, $id);
-        $query->bindParam(2, $fullName);
-        $query->bindParam(3, $email);
-        $query->bindParam(4, $majorId);
+        $query->bindParam(2, $data['full_name']);
+        $query->bindParam(3, $data['email']);
+        $query->bindParam(4, $data['major']);
         $query->bindParam(5, $maxBorrows);
-        $query->bindParam(6, $password);
+        $query->bindParam(6, $data['password']);
         $query->execute();
 }
 
@@ -39,17 +41,13 @@ function getUserByIDOrEmail($findBy){
 function updateUser($newUser){
         global $conn;
 
-        // Update all the attributes of the user
-        $sql = 'update users set fullName = ?, email = ?, majorId = ?, borrows_left = ?, password = ?
-        where userId = ?';
-        
-        $query = $conn->prepare($sql);
-        $query->bindParam(1, $newUser['fullName']);
-        $query->bindParam(2, $newUser['email']);
-        $query->bindParam(3, $newUser['majorId']);
-        $query->bindParam(4, $newUser['borrows_left']);
-        $query->bindParam(5, $newUser['password']);
-        $query->bindParam(6, $newUser['userId']);
+        $sql = 'update users set fullName = ?, email = ?, majorId = ?, password = ? where userId = ?';
 
+        $query = $conn->prepare($sql);
+        $query->bindParam(1, $newUser['full_name']);
+        $query->bindParam(2, $newUser['email']);
+        $query->bindParam(3, $newUser['major']);
+        $query->bindParam(4, $newUser['password']);
+        $query->bindParam(5, $newUser['user_id']);
         $query->execute();
 }
