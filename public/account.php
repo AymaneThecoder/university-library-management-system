@@ -11,15 +11,13 @@
 
     if(!isset($user_id) && !isset($_POST['saveChanges']))
     {
-        redirect('login');
+        redirect('login', []);
 
     } elseif(!isset($user_id) && isset($_POST['saveChanges'])) {
 
         //The user tries to modify account info when he loggedout
         //Send an error
-        $_SESSION['profile_modified'] = false;
-        redirect('login');
-
+        redirect('login', ['msg_status' => 'error', 'msg' => 'Votre compte n\'a pas été modifé']);
     }
     
 

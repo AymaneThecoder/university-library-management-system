@@ -2,26 +2,12 @@
     session_start();
 	require_once "../app/includes/logic/user.php";
 
-    //Check if the request came from modify account page
-
-    $refererPage = $_SERVER['HTTP_REFERER'] ?? 'login.php';
-
-    if(str_contains($refererPage, 'account.php'))
-    {
-        if(isset($_SESSION['profile_modified']))
-        {
-            if($_SESSION['profile_modified'] == true)
-            {
-                $response = array('status' => 'success', 'message' => 'Votre compte à été bien modifié');
-            } else {
-                $response = array('status' => 'error', 'message' => 'Il y\'a un errur lors du modifcation de votre compte!') ;
-            }
-        }
-    }
+    $response = htmlspecialchars($_GET['msg'] ?? '');
+    $responseStatus = $_GET['msg_status'] ?? '';
 
 	if(isset($_POST['submit'])){
         unset($_POST['submit']);
-		$response = array('status' => 'error', 'message' => loginUser($_POST));
+		$response = loginUser($_POST);
 	}
 
 // Header
@@ -45,7 +31,7 @@ require_once '../app/includes/partials/header.php';
 
                     <div class="signin-form">
                         <h2 class="form-title">Se connecter</h2>
-                          <p class="<?= @$response['status'] == "success" ? 'text-success' : 'text-danger' ?>" > <?php echo @$response['message']; ?> </p>
+                          <p class="<?= @$responseStatus == "success" ? 'text-success' : 'text-danger' ?>" > <?php echo @$response; ?> </p>
                             <div class="form-group">
                                 <label for="your_name"><i class="fa fa-user"></i></label>
                                 <input type="text"  id="your_name" placeholder="Email" name="email" value="<?php echo @$_POST['email']; ?>"/>

@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 use Dompdf\Dompdf;
 
 require_once '../../data/user.php';
@@ -7,8 +9,17 @@ require_once '../../data/document.php';
 require_once '../../data/borrow.php';
 require_once dirname(__DIR__) . '/../../../vendor/autoload.php';
 
+// The user is not loggedin
+
+if(!isset($_SESSION['user_id']))
+{
+  echo json_encode(array('borrowError' => 'Vous n\'etes pas authentifié encore'));
+  exit;
+}
 
 $borrow_params = $_POST['data'];
+$borrow_params['userID'] = $_SESSION['user_id'];
+
 $user = $document = array();
 
 // The max time for the use to keep the document (in days)

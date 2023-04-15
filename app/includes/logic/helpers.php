@@ -3,8 +3,21 @@
 
 // Redirect to another page
 
-function redirect($page){
-    header("Location: $page.php");
+function redirect($page, $params){
+    
+	if(count($params) > 0)
+	{
+		$page .= '.php?';
+
+		$params = array_map(function ($key, $value) {
+			return "$key=$value";
+		}, array_keys($params), array_values($params));
+
+		$paramsStr = implode('&', $params);
+		$page .= $paramsStr;
+	}
+
+    header("Location: $page");
     die();
 }
 

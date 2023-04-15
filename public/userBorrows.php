@@ -10,7 +10,7 @@
 
     if(!isset($user_id))
     {
-        redirect('login');
+        redirect('login', ['name' => 'ayoub', 'age' => 56]);
     }
 
     // Header

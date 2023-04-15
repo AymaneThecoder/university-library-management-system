@@ -37,7 +37,7 @@ require_once '../app/includes/partials/header.php';
                             <div class="modal-body">
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-primary" data-bs-dismiss="modal">D'accord</button>
+                                <button class="btn btn-primary" data-bs-dismiss="modal">Fermer</button>
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,6 @@ require_once '../app/includes/partials/header.php';
                      <p class="page_count"><span style="font-weight: bold;">Nombre de page: </span><?= $document['pageCount'] ?></p>
                      <p class="doc_type"><span style="font-weight: bold;">Type de document: </span><?= $document['docType'] ?></p>
                      <input type="hidden" value="<?= $document['id'] ?>" name="docID">
-                     <input type="hidden" value="<?= isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '9' ?>" name="userID">
                     </div>
                 </div>
             </div>
@@ -77,7 +76,7 @@ require_once '../app/includes/partials/header.php';
   require_once  '../app/includes/partials/footer.php';
 ?>
 
-<script src="./js/ajax/borrow.js?v=3"></script>
+<script src="./js/ajax/borrow.js?v=8"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 <script src="http://localhost/management-of-library/app/js/main.js?v=3"></script>
 </body>

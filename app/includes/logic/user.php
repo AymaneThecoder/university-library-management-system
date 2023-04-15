@@ -57,7 +57,7 @@
 
 		addUser($data);
 
-		redirect('login');
+		redirect('login', []);
 	}
 
 
@@ -92,7 +92,7 @@
 		}else{
 		    session_start();
 			$_SESSION["user_id"] = $user['userId'];
-			redirect('home');
+			redirect('home', []);
 		}
 	}
 
@@ -136,10 +136,7 @@
 
 		updateUser($data);
 
-		//Set the success message
-        $_SESSION['profile_modified'] = true;
-		
-		redirect('login');
+        redirect('login', ['msg_status' => 'success', 'msg' => 'Votre compte a été bien modifé']);
 	}
 
 	// Logout
@@ -206,7 +203,7 @@
 	// To check if the OTP code has been expired
 	$_SESSION['last_activity'] = time();
 
-	redirect('resetPwdCode');
+	redirect('resetPwdCode', []);
 
 	}
 
@@ -229,7 +226,7 @@
 		}
 
 
-		redirect('newPassword');
+		redirect('newPassword', []);
 	}
 
 	// Change password for resetting
@@ -252,7 +249,7 @@
 
 	 updateUser($user);
 
-	 redirect('login');
+	 redirect('login', []);
 	}
 
 	function deleteAccount(){
