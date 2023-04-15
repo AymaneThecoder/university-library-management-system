@@ -1,0 +1,9 @@
+
+
+ table.docs .doc-title
+{
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

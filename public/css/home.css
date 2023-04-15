@@ -33,14 +33,6 @@
   border-radius: 8px;
 }
 
-/* Fixed search input when scrolling */
-.search-documents-container.fixe
-{
-  position: fixed;
-  top: 100px;
-  z-index: 99;
-}
-
 
 /* Documents section */
 

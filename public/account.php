@@ -52,7 +52,7 @@
    ?>
 
 
-    <section class="container-lg mt-5 pt-3">
+    <section class="container-lg mt-5 mb-5 pb-3 pt-3">
       <form action="" class="form" method="post">
         <h4 class="border-bottom border-1 border-dark px-5 py-2 m-auto mb-5" style="width: fit-content;">Mon compte</h4>
         <p class="text-center mb-4">Vous trouvez ici tous vos informations, Vous pouvez les changer.</p>

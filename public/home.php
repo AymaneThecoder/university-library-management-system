@@ -63,9 +63,9 @@ require_once '../app/includes/partials/header.php';
 
         <div class="filter-btns d-flex column-gap-3 mb-5">
           <button class="filter-documents-btn active btn btn-md btn-outline-primary">Tous</button>
-          <button class="filter-documents-btn btn btn-md btn-outline-primary">Livres</button>
-          <button class="filter-documents-btn btn btn-md btn-outline-primary">Periodiques</button>
-          <button class="filter-documents-btn btn btn-md btn-outline-primary">Articles</button>
+          <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="livre" >Livres</button>
+          <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="periodique" >Periodiques</button>
+          <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="article" >Articles</button>
         </div>
         <ul class="documents list-unstyled row">
 
@@ -108,6 +108,6 @@ require_once '../app/includes/partials/header.php';
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-<script src="./js/main.js?v=3"></script>
+<script src="./js/main.js?v=1"></script>
 </body>
 </html>

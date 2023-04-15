@@ -1,6 +1,6 @@
 <!-- Footer -->
 
-<footer class="footer mt-5">
+<footer class="footer">
         <nav class="navbar navbar-expand">
             <div class="container">
                     <a href="http://localhost/management-of-library/public/home.php" class="navbar-brand">

@@ -25,8 +25,8 @@ require_once '../app/includes/partials/header.php';
    ?>
 
     <!-- Search results section -->
-
-    <section class="search-result">
+   
+    <section class="search-result main">
         <div class="container">
             <h5 class="resul-query mt-5" >Resultat pour: <span style="color: green;"><?= $q ?></span></h5>
 
@@ -41,16 +41,16 @@ require_once '../app/includes/partials/header.php';
 
                             <div class="filter-btns d-flex column-gap-3">
                                 <button class="filter-documents-btn active btn btn-md btn-outline-primary">Tous</button>
-                                <button class="filter-documents-btn btn btn-md btn-outline-primary">Livres</button>
-                                <button class="filter-documents-btn btn btn-md btn-outline-primary">Periodiques</button>
-                                <button class="filter-documents-btn btn btn-md btn-outline-primary">Articles</button>
+                                <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="livre" >Livres</button>
+                                <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="periodique">Periodiques</button>
+                                <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="article">Articles</button>
                             </div>
                     </div>
                     <div class="col">
                         <div class="search-form-container">
                             <form action="" class="">
                                 <div class="input-group w-75  ms-auto">
-                                    <input class="form-control" type="text" name="search-query" id="">
+                                    <input class="form-control" type="text" name="search-query" id="" placeholder="Titre ou auteur">
                                     <button class="search-btn btn btn-primary">
                                         <i class="fa fa-search"></i>
                                     </button>
@@ -61,7 +61,10 @@ require_once '../app/includes/partials/header.php';
                      </div>
 
                     <ul class="documents list-unstyled row mt-5 pt-5">
+
                     <?php
+                    if(count($documents) > 0)
+                    {
                     foreach($documents as $doc):
                     ?>
                         <li class="document col-md-6 col-lg-4 mb-5" data-document-type=<?= $doc['docType'] ?>>
@@ -82,7 +85,16 @@ require_once '../app/includes/partials/header.php';
                         </li>
                     <?php
                     endforeach;
+
+                    }else{    
                     ?>
+
+                    <h5>Ooops! Aucune resultat à été trouvé</h5>
+
+                    <?php
+                    }
+                    ?>
+
                     </ul>
             </section>
         </div>
@@ -94,8 +106,7 @@ require_once '../app/includes/partials/header.php';
   require_once  '../app/includes/partials/footer.php';
 ?>
 
-<script src="../js/borrow.js?v=3"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-<script src="http://localhost/management-of-library/app/js/main.js?v=1"></script>
+<script src="./js/main.js?v=5"></script>
 </body>
 </html>

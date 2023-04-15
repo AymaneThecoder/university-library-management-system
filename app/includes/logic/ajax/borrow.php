@@ -1,25 +1,30 @@
 <?php
 
+use Dompdf\Dompdf;
+
 require_once '../../data/user.php';
 require_once '../../data/document.php';
 require_once '../../data/borrow.php';
+require_once dirname(__DIR__) . '/../../../vendor/autoload.php';
 
-$borrow_data = $_POST['data'];
+
+$borrow_params = $_POST['data'];
+$user = $document = array();
 
 // The max time for the use to keep the document (in days)
 define('max_doc_keep', 21);
 
-$borrow_response = borrowDocument($borrow_data);
+$borrow_response = borrowDocument($borrow_params);
 echo json_encode($borrow_response);
 
-function borrowDocument($borrow_data){
-  if(isDocumentAvailable($borrow_data['docID']))
+function borrowDocument($borrow_params){
+  if(isDocumentAvailable($borrow_params['docID']))
   {
-    if(userCanBorrow($borrow_data['userID']))
+    if(userCanBorrow($borrow_params['userID']))
     {
-      if(!isDocumentAlreadyBorrowed($borrow_data))
+      if(!isDocumentAlreadyBorrowed($borrow_params))
       {
-        $borrow_data = createBorrow($borrow_data);
+        $borrow_data = createBorrow($borrow_params);
         return $borrow_data;
       }
       return array('borrowError' => 'Vous avez deja cette document dans vos empruntes!');
@@ -34,14 +39,15 @@ function isDocumentAvailable($doc_id) {
 
   // Check if the document still exist in the database
   // And number of copies > 0
-
-  $documentToBorrow =  getDocumentByID($doc_id);
-  $nbrOfCopies =  isset($documentToBorrow['copiesLeft']) ? $documentToBorrow['copiesLeft'] : 0;
+  global $document;
+  $document =  getDocumentByID($doc_id);
+  $nbrOfCopies =  isset($document['copiesLeft']) ? $document['copiesLeft'] : 0;
   return $nbrOfCopies > 0;
 }
 
 
 function userCanBorrow($user_id){
+  global $user;
   
   // Check if the user has borrows left
 
@@ -73,6 +79,46 @@ function createBorrow($data){
   $return_date = date('Y-m-d', strtotime($borrow_date . '+ ' . max_doc_keep . ' days'));
   $user_id = $data['userID'];
   $doc_id = $data['docID'];
-  add_borrow($user_id, $doc_id, $borrow_code, $return_date);
-  return array('borrowCode' => $borrow_code, 'returnDate' => $return_date);
+
+  $borrowData = array(
+    'borrowCode' => $borrow_code,
+    'borrowDate' => $borrow_date,
+    'returnDate' => $return_date
+  );
+  
+
+  // Create borrow receipt
+  $receiptFileUrl = generateBorrowReceipt($borrowData);
+
+  add_borrow($user_id, $doc_id, $borrow_code, $borrow_date, $return_date, $receiptFileUrl);
+
+  return array('receiptFileUrl' => $receiptFileUrl);
+}
+
+
+// Generate borrow receipt PDF file
+
+function generateBorrowReceipt($borrowData) {
+  global $user;
+  global $document;
+
+  // Create a new PDF file using dompPdf
+  $receiptPdf = new Dompdf();
+  $html = file_get_contents(dirname(__DIR__)  . "/../templates/receipt.html");
+
+  // Fill the template with borrow data
+  $toReplace = ['{{ code }}', '{{ borrowDate }}', '{{ returnDate }}', '{{ fullName }}', '{{ title }}'];
+  $replaceWith = [$borrowData['borrowCode'], $borrowData['borrowDate'], $borrowData['returnDate'], $user['fullName'], $document['title']];
+  $html = str_replace($toReplace, $replaceWith, $html);
+  $receiptPdf->loadHtml($html);
+  $receiptPdf->render();
+
+  // Store file to receipts folder
+  $output = $receiptPdf->output();
+  $filePath = dirname(__DIR__)  . "/../../../public/assets/receipts/";
+  $fileName = "recu_{$borrowData['borrowCode']}.pdf";
+
+  file_put_contents($filePath . $fileName, $output);
+
+  return 'http://localhost/management-of-library/public/assets/receipts/' . $fileName;
 }

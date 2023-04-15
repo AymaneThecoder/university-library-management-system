@@ -17,9 +17,10 @@ $('#borrowBtn').click(function (){
      $('#borrowModal .modal-body').html(`<h5 class='text-center text-danger'>${data.borrowError}</h5>`);
    } else {
     $('#borrowModal .modal-body').html(`
-    <h4 class='text-center'>Votre code d'emprunte est <span class='text-primary'>${data.borrowCode}</span></h4>
-    <p class='text-danger'>Note: vous devez retoruner le document avant le ${data.returnDate}</p>`
-    )
+    <div class="text-center">
+    <h5 class='text-success'>Emprunte effectueé avec succés</h5>
+    <a download href="${data.receiptFileUrl}">Telecharger le recu</a>
+    </div>`)
    }
   })
 })

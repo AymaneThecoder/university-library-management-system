@@ -6,6 +6,8 @@
 	require dirname(__DIR__) . "/../config/db.php";
 	require "helpers.php";
 	require dirname(__DIR__) . "./data/user.php";
+	require dirname(__DIR__) . "./data/borrow.php";
+	require dirname(__DIR__) . "./data/document.php";
 	require dirname(__DIR__) . '/../../vendor/autoload.php';
 
 
@@ -265,4 +267,18 @@
 			header("location: delete-message.php");			
 			exit();
 		
+	}
+
+	// Get user borrows
+
+	function getUserBorrows($userId){
+		$borrows = getBorrowsByUserID($userId);
+
+		// Add the document title to the borrow row
+		foreach($borrows as &$borrow){
+			$borrowedDocument = getDocumentByID($borrow['docId']);
+			$borrow['docTitle'] =  $borrowedDocument['title'];
+		}
+		
+		return $borrows;
 	}

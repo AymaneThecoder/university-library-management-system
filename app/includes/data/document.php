@@ -29,9 +29,10 @@ function getDocumentByID($id){
 function searchDocuments($search_for){
         global $conn;
         $search_for = '%' . $search_for . '%';
-        $sql = "select * from documents where title like ?";
+        $sql = "select * from documents where title like ? OR author like ?";
         $query = $conn->prepare($sql);
         $query->bindParam(1, $search_for);
+        $query->bindParam(2, $search_for);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $documents = $query->fetchAll();

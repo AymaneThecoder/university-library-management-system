@@ -1,5 +1,5 @@
         
-        <nav class="navbar navbar-expand sticky-top bg-white">
+        <nav class="navbar navbar-expand bg-white">
             <div class="container py-2 px-3 px-sm-0">
 
                        <!-- LOGO -->
@@ -27,7 +27,7 @@
                        </button>
                        <div class="dropdown-menu dropdown-menu-end">
                            <li class="dropdown-item">
-                               <a class="borrows-btn text-dark text-decoration-none">Mes empruntes</a>
+                               <a href="userBorrows.php" class="borrows-btn text-dark text-decoration-none">Mes empruntes</a>
                            </li>
                            <li class="dropdown-item">
                                <a href="account.php" class="logout-btn text-dark text-decoration-none">Mon compte</a>
