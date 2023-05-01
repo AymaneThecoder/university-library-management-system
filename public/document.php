@@ -1,8 +1,9 @@
 <?php
 session_start();
-require_once '../app/includes/logic/document.php';
+require_once '../app/includes/data/document.php';
 
-$document = show();
+$docId = htmlspecialchars($_GET['doc_id']);
+$document = getDocumentByID($docId);
 
 // Header
 

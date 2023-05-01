@@ -2,37 +2,35 @@
 
 require_once dirname(__DIR__) . '/data/document.php';
 
-
-// Index
-
-function index() {
-   $documents = getDocuments();
-   return $documents;
-}
-
-// Show
-
-function show() {
-    $doc_id = filter_input(INPUT_GET, 'doc_id', FILTER_SANITIZE_SPECIAL_CHARS);
-    $document = getDocumentByID($doc_id);
-    return $document;
-}
-
 // Search
 
 function search() {
-    $search_query = filter_input(INPUT_GET, 'search-query', FILTER_SANITIZE_SPECIAL_CHARS);
 
-// Stay in the home page if the query is empty
-    if(!$search_query)
-    {
-        header('Location: http://localhost/management-of-library/public/home.php');
-        exit;
-    }
+    $search_query = filter_input(INPUT_GET, 'search_query', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    $documents = searchDocuments($search_query);
+    /* Pagination */
+    
+    // Get number of documents avaialabe for that search query
+
+    $sql = 'select count(*) as total from documents where author like ? OR title like ?';
+    $countResult = customDocumentQuery($sql, ["%$search_query%", "%$search_query%"]);
+    $totalDocs = $countResult[0]['total'];
+
+    // Paginate
+    
+    $currentPage = htmlspecialchars(abs($_GET['page'] ?? 1));
+    $nbrDocsPerPage = 5;
+    $nbrPages = ceil($totalDocs / $nbrDocsPerPage);
+    $startOffset = ($currentPage - 1) * $nbrDocsPerPage;
+
+    $sql = 'select * from documents where author like ? OR title like ? limit ?,?';
+    $documents = customDocumentQuery($sql, ["%$search_query%", "%$search_query%", $startOffset, $nbrDocsPerPage]);
+    
     return array(
         'documents' => $documents,
-        'q' => $search_query
+        'q' => $search_query,
+        'nbrPages' => $nbrPages,
+        'currentPage' => $currentPage
     );
+
 }

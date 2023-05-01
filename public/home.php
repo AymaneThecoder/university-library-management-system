@@ -1,9 +1,13 @@
 
 <?php
 session_start();
-require_once '../app/includes/logic/document.php';
+require_once '../app/includes/data/document.php';
 
-$documents = index();
+// Show just 9 documents in home page
+
+$sql = 'select * from documents limit ?,?';
+$documents = customDocumentQuery($sql, [0, 9]);
+
 
 // Header
 
@@ -53,20 +57,15 @@ require_once '../app/includes/partials/header.php';
 
 <!-- Hero section end -->
 
-<!-- Articles showcase section start -->
+<!-- Documents showcase section start -->
 
 <section class="documents-showcase-section mt-5 pt-5">
     <div class="container px-5">
 
-    <h4 class=" text-center my-5">Choisir dans <span class="doc_count text-primary"><?= count($documents) ?></span> diffrentes documents dans des domaines diverse</h4>
-        <!-- Filter elements -->
+    <h4 class=" text-center my-5 pb-3 text-capitalize">Choisir dans <span class="doc_count text-primary"><?= count($documents) ?></span> diffrentes documents dans des domaines diverse</h4>
+        
+    <!-- Documents -->
 
-        <div class="filter-btns d-flex column-gap-3 mb-5">
-          <button class="filter-documents-btn active btn btn-md btn-outline-primary">Tous</button>
-          <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="livre" >Livres</button>
-          <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="periodique" >Periodiques</button>
-          <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="article" >Articles</button>
-        </div>
         <ul class="documents list-unstyled row">
 
         <?php
@@ -95,6 +94,11 @@ require_once '../app/includes/partials/header.php';
         ?>
 
         </ul>
+
+        <div class="text-center mt-5 mb-4 pb-5">
+            <a href="search.php" class="btn btn-link py-2 px-3 border border-1 border-primary">Voir toutes les documents</a>
+        </div>
+
     </div>
 </section>
 

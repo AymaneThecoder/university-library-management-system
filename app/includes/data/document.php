@@ -4,6 +4,8 @@ require_once dirname(__DIR__) . '/../config/db.php';
 
 $conn = getConnection();
 
+// List all documents
+
 function getDocuments(){
         global $conn;
         $sql = 'select * from documents';
@@ -12,7 +14,9 @@ function getDocuments(){
         $query->setFetchMode(PDO::FETCH_ASSOC);
         $documents = $query->fetchAll();
         return $documents;
-    }
+}
+
+// Get document by it's identifier
 
 function getDocumentByID($id){
         global $conn;
@@ -24,17 +28,31 @@ function getDocumentByID($id){
         $document = $query->fetchAll();
         $document = !empty($document) ? $document[0] : array();
         return $document;
+}
+
+// Create custom SQL queries for 'document' table
+
+function customDocumentQuery($command, $params){
+    global $conn;
+    $query = $conn->prepare($command);
+
+    // Bind params
+
+    $paramsTypes = [
+        'integer' => PDO::PARAM_INT,
+        'string' => PDO::PARAM_STR,
+        'boolean' => PDO::PARAM_BOOL
+    ];
+
+    for($i = 0; $i < count($params); $i++)
+    {
+        $paramType = $paramsTypes[gettype($params[$i])];
+        $query->bindParam($i + 1, $params[$i], $paramType);
     }
 
-function searchDocuments($search_for){
-        global $conn;
-        $search_for = '%' . $search_for . '%';
-        $sql = "select * from documents where title like ? OR author like ?";
-        $query = $conn->prepare($sql);
-        $query->bindParam(1, $search_for);
-        $query->bindParam(2, $search_for);
-        $query->execute();
-        $query->setFetchMode(PDO::FETCH_ASSOC);
-        $documents = $query->fetchAll();
-        return $documents;
-    }
+    $query->setFetchMode(PDO::FETCH_ASSOC);
+    $query->execute();
+    $result = $query->fetchAll();
+
+    return $result;
+}

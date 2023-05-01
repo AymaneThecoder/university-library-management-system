@@ -4,6 +4,7 @@ require_once '../app/includes/logic/document.php';
 
 $dataReturned = search();
 
+
 foreach($dataReturned as $key => $value)
 {
     $$key = $value;
@@ -28,7 +29,14 @@ require_once '../app/includes/partials/header.php';
    
     <section class="search-result main">
         <div class="container">
-            <h5 class="resul-query mt-5" >Resultat pour: <span style="color: green;"><?= $q ?></span></h5>
+            
+        <?php
+        if($q):
+        ?>
+          <h5 class="resul-query mt-5" >Resultat pour: <span style="color: green;"><?= $q ?></span></h5>
+        <?php
+        endif;
+        ?>
 
             <!-- Articles showcase section start -->
 
@@ -50,7 +58,7 @@ require_once '../app/includes/partials/header.php';
                         <div class="search-form-container">
                             <form action="" class="">
                                 <div class="input-group w-75  ms-auto">
-                                    <input class="form-control" type="text" name="search-query" id="" placeholder="Titre ou auteur">
+                                    <input class="form-control" type="text" name="search_query" id="" placeholder="Titre ou auteur">
                                     <button class="search-btn btn btn-primary">
                                         <i class="fa fa-search"></i>
                                     </button>
@@ -96,6 +104,27 @@ require_once '../app/includes/partials/header.php';
                     ?>
 
                     </ul>
+
+
+                    <!-- Pagination -->
+
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li  class="page-item"><a class="page-link <?= $currentPage == 1 ? 'disabled' : '' ?>" href="?search_query=<?= $q ?>&page=<?= $currentPage - 1 ?>">Precedent</a></li>
+                            <?php
+
+                            for($i = 1; $i <= $nbrPages; $i++):
+                            ?>
+                            <li class="page-item <?= $currentPage == $i ? 'active' : '' ?>"><a class="page-link" href="?search_query=<?= $q ?>&page=<?= $i ?>"><?= $i ?></a></li>
+                            <?php
+                            endfor;
+                            ?>
+
+                            <li class="page-item"><a class="page-link" href="#">Suivant</a></li>
+                        </ul>
+                    </nav>
+
+
             </section>
         </div>
     </section>
