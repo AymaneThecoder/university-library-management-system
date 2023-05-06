@@ -27,6 +27,7 @@ define('max_doc_keep', 21);
 
 $borrow_response = borrowDocument($borrow_params);
 echo json_encode($borrow_response);
+exit;
 
 function borrowDocument($borrow_params){
   if(isDocumentAvailable($borrow_params['docID']))
@@ -52,8 +53,13 @@ function isDocumentAvailable($doc_id) {
   // And number of copies > 0
   global $document;
   $document =  getDocumentByID($doc_id);
-  $nbrOfCopies =  isset($document['copiesLeft']) ? $document['copiesLeft'] : 0;
-  return $nbrOfCopies > 0;
+
+  if(!$document)
+  {
+    return false;
+  }
+
+  return $document['copiesLeft'] > 0;
 }
 
 

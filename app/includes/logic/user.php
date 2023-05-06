@@ -151,12 +151,11 @@
 	// Send reset password code
 
 	function sendResetPwdCode($data) {
-     $email = htmlspecialchars(trim($data['email']));
+    $email = htmlspecialchars(trim($data['email']));
 
-    $response =  validateUserData($data, []);
-	if($response != 'validated')
+	if(!filter_var($email, FILTER_VALIDATE_EMAIL))
 	{
-		return $response;
+		return 'Email invalid!';
 	}
 
 	$user = getUserByIDOrEmail($email);
@@ -170,28 +169,18 @@
 	// Store userId
 	$_SESSION['user_id'] = $user['userId'];
 
-	// Send the code
+	// Random string code
 	$str = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz";
 	$code = substr(str_shuffle($str), 0, 8);
 
+	// Send email
 	$to = $email; 
+	$subject = 'Oublie mot de passe';
     $body = "Votre code de reinitialisation est <b>$code</b>";
 
-	$mail = new PHPMailer();
-	$mail->isSMTP();
-	$mail->Host = "smtp.gmail.com";
-	$mail->SMTPAuth = true;
-	$mail->Username = "username";
-	$mail->Password = "password";
-	$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-	$mail->Port = 587;
-	$mail->setFrom('username');
-	$mail->addAddress($to);
-	$mail->Subject = 'Reinitialisation du mot de passe';
-	$mail->isHTML(true);
-	$mail->Body = $body;
+	$emailResponse = sendEmail(compact(array('to', 'body', 'subject')));
 
-	if(!$mail->send())
+	if(!$emailResponse)
 	{
 		return 'Erreur lors d\'envoi du email!';
 	}

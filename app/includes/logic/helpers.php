@@ -1,5 +1,9 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+
+require dirname(__DIR__) . '/../../vendor/autoload.php';
+
 
 // Redirect to another page
 
@@ -183,4 +187,26 @@ function formatInputName($name) {
    	}, str_split($name)
    		)
 	);
+}
+
+// Send emails
+
+function sendEmail($options){
+	$mail = new PHPMailer();
+
+	$mail->setFrom('ajaraiayoub@gmail.com');
+	$mail->addAddress($options['to']);
+	$mail->Subject = $options['subject'] ?? '';
+	$mail->isHTML();
+	$mail->Body = $options['body'] ?? '';
+
+	$mail->isSMTP();
+	$mail->Host = "smtp.gmail.com";
+	$mail->SMTPAuth = true;
+	$mail->Username = "username";
+	$mail->Password = "password";
+	$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+	$mail->Port = 587;
+
+	return $mail->send();
 }
