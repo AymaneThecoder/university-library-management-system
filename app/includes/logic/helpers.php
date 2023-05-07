@@ -210,3 +210,47 @@ function sendEmail($options){
 
 	return $mail->send();
 }
+
+// Paginate data
+
+function paginate($nbrItemsPerPage, $table, $filtersString = '', $sqlParams = []){
+
+	// Get the query function name
+	$queryFn = getQueryFunctionName($table);
+
+	// Count items
+	$countSql = 'select count(*) as total from ';
+	$countSql .= $table;
+	$countSql .= $filtersString;
+
+	$countResult = $queryFn($countSql, $sqlParams);
+    $totalDocs = $countResult[0]['total'];
+    
+	// Do calculation
+    $currentPage = htmlspecialchars(abs($_GET['page'] ?? 1));
+    $nbrPages = ceil($totalDocs / $nbrItemsPerPage);
+    $startOffset = ($currentPage - 1) * $nbrItemsPerPage;
+
+    array_push($sqlParams, $startOffset, $nbrItemsPerPage);
+
+	$getSql = str_replace('count(*) as total', '*', $countSql);
+    $getSql .= ' limit ?,?';
+
+	// Get items
+    $items = customDocumentQuery($getSql, $sqlParams);
+
+	return array(
+		'items' => $items,
+		'nbrOfPages' => $nbrPages,
+		'currentPage' => $currentPage 
+	);
+
+}
+
+// This function is used to get the function
+// name for sql queries like (customDocumentsQuery, customUsersQuery)
+
+function getQueryFunctionName($tableName){
+
+	return 'custom' . ucfirst(rtrim($tableName, 's')) .  'Query';
+}

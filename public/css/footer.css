@@ -1,7 +1,19 @@
 
+/*
+    Some classes are prefixed with 'custom' in order to distinguish 
+    them from boostrtap classes
+*/
 
 /* Footer */
 footer.footer
 {
-  background-color: lightgray;
+  background-color: rgb(233, 233, 233);
+}
+footer.footer .navbar-link
+{
+  color: rgb(163, 163, 163);
+}
+footer.footer .active
+{
+  color: var(--color-primary);
 }

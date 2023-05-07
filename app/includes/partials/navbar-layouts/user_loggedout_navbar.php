@@ -6,20 +6,12 @@
                    <a class="navbar-brand" href="home.php">
                        <h2>jaliss</h2>
                    </a>
-                   <ul class="navbar-nav navbar-center column-gap-5">
-                       <li class="nav-item">
-                           <a href="#" class="nav-link active">Tous</a>
-                       </li>
-                       <li class="nav-item">
-                           <a href="#" class="nav-link">Articles</a>
-                       </li>
-                       <li class="nav-item">
-                           <a href="#" class="nav-link">Livres</a>
-                       </li>
-                       <li class="nav-item">
-                           <a href="#" class="nav-link">Periodiques</a>
-                       </li>
-                   </ul>
+
+                  <!-- nav links -->
+                  <?php
+                        require_once 'nav-links.php';
+                    ?>
+                    
                    <ul class="navbar-nav navbar-right align-items-center column-gap-2">
                        <li class="nav-item">
                             <a href="signup.php" class="signup-btn btn btn-lg  btn-outline-secondary">Creer votre compte</a>

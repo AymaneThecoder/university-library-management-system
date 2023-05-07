@@ -1,36 +1,45 @@
 <?php
 
 require_once dirname(__DIR__) . '/data/document.php';
+require_once dirname(__DIR__) . '/logic/helpers.php';
 
 // Search
 
 function search() {
 
-    $search_query = filter_input(INPUT_GET, 'search_query', FILTER_SANITIZE_SPECIAL_CHARS);
-
-    /* Pagination */
     
-    // Get number of documents avaialabe for that search query
+    $search_query = filter_input(INPUT_GET, 'search_query', FILTER_SANITIZE_SPECIAL_CHARS);
+    $docType = filter_input(INPUT_GET, 'doc_type', FILTER_SANITIZE_SPECIAL_CHARS);
+    
+    // Filters
+    $filters = $sqlParams = [];
 
-    $sql = 'select count(*) as total from documents where author like ? OR title like ?';
-    $countResult = customDocumentQuery($sql, ["%$search_query%", "%$search_query%"]);
-    $totalDocs = $countResult[0]['total'];
+    if($search_query)
+    {
+        $filters[] = "(title like ? OR author like ?)";
+        array_push($sqlParams, "%$search_query%", "%$search_query%");
+    }
+
+    if($docType)
+    {
+        $filters[] = "docType = ?";
+        array_push($sqlParams, $docType);
+    }    
+
+    if(count($filters) > 0)
+    {
+        $filtersString = ' where ' . implode(' and ', $filters);
+    }
 
     // Paginate
-    
-    $currentPage = htmlspecialchars(abs($_GET['page'] ?? 1));
-    $nbrDocsPerPage = 5;
-    $nbrPages = ceil($totalDocs / $nbrDocsPerPage);
-    $startOffset = ($currentPage - 1) * $nbrDocsPerPage;
 
-    $sql = 'select * from documents where author like ? OR title like ? limit ?,?';
-    $documents = customDocumentQuery($sql, ["%$search_query%", "%$search_query%", $startOffset, $nbrDocsPerPage]);
+    $toReturn = paginate(12, 'documents', @$filtersString, $sqlParams);
     
     return array(
-        'documents' => $documents,
-        'q' => $search_query,
-        'nbrPages' => $nbrPages,
-        'currentPage' => $currentPage
+        'documents' => $toReturn['items'],
+        'q' => $search_query ?? null,
+        'nbrPages' => $toReturn['nbrOfPages'],
+        'currentPage' => $toReturn['currentPage']
     );
 
 }

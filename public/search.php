@@ -27,38 +27,29 @@ require_once '../app/includes/partials/header.php';
 
     <!-- Search results section -->
    
-    <section class="search-result main">
+    <section class="search-result main pt-5">
         <div class="container">
             
-        <?php
-        if($q):
-        ?>
-          <h5 class="resul-query mt-5" >Resultat pour: <span style="color: green;"><?= $q ?></span></h5>
-        <?php
-        endif;
-        ?>
+       
 
             <!-- Articles showcase section start -->
 
             <section class="documents-showcase-section mt-5">
 
+                <!-- Search bar -->
+
                 <div class="row align-items-center">
                     <div class="col">
-
-                            <!-- Filter elements -->
-
-                            <div class="filter-btns d-flex column-gap-3">
-                                <button class="filter-documents-btn active btn btn-md btn-outline-primary">Tous</button>
-                                <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="livre" >Livres</button>
-                                <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="periodique">Periodiques</button>
-                                <button class="filter-documents-btn btn btn-md btn-outline-primary" data-filter="article">Articles</button>
-                            </div>
-                    </div>
-                    <div class="col">
-                        <div class="search-form-container">
-                            <form action="" class="">
-                                <div class="input-group w-75  ms-auto">
-                                    <input class="form-control" type="text" name="search_query" id="" placeholder="Titre ou auteur">
+                        <div class="search-form-container ms-auto w-50">
+                            <form action="<?= $_SERVER['REQUEST_URI'] ?>" class="">
+                                <div class="d-flex custom-input-group">
+                                    <select name="doc_type" id="" class="form-select rounded-left" style="width: 120px;">
+                                        <option value="">Tous</option>
+                                        <option value="article" <?= @$_GET['doc_type'] == 'article' ? 'selected' : '' ?>>Articles</option>
+                                        <option value="livre" <?= @$_GET['doc_type'] == 'livre' ? 'selected' : '' ?>>Livres</option>
+                                        <option value="periodique" <?= @$_GET['doc_type'] == 'periodique' ? 'selected' : '' ?>>Periodiques</option>
+                                    </select>
+                                    <input class="form-control" type="text" name="search_query" id="" value="<?= @$_GET['search_query'] ?>" placeholder="Titre ou auteur">
                                     <button class="search-btn btn btn-primary">
                                         <i class="fa fa-search"></i>
                                     </button>
@@ -66,7 +57,18 @@ require_once '../app/includes/partials/header.php';
                             </form>
                         </div>
                     </div>
-                     </div>
+
+                    <?php
+                    if($q):
+                    ?>
+                    <h6 class="resul-query mt-5" >Resultat pour: <span style="color: green;"><?= $q ?></span></h6>
+                    <?php
+                    endif;
+                    ?>
+
+                </div>
+
+                <!-- Documents list -->
 
                     <ul class="documents list-unstyled row mt-5 pt-5">
 
@@ -120,7 +122,7 @@ require_once '../app/includes/partials/header.php';
                             endfor;
                             ?>
 
-                            <li class="page-item"><a class="page-link" href="#">Suivant</a></li>
+                            <li class="page-item"><a class="page-link <?= $currentPage == $nbrPages ? 'disabled' : '' ?>" href="#">Suivant</a></li>
                         </ul>
                     </nav>
 

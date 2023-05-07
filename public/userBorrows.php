@@ -47,7 +47,7 @@
         if(count($borrows) > 0):
         ?>
 
-        <table class="docs table bg-white px-4">
+        <table class="docs table align-middle bg-white px-4">
 
         <!-- Table head -->
             <thead>
@@ -55,7 +55,7 @@
                 <th>Titre du document</th>
                 <th>Date d'emprunte</th>
                 <th>Date de retour</th>
-                <th>Action</th>
+                <th>Imprimer</th>
             </thead>
 
         <!-- Table body -->

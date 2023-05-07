@@ -51,3 +51,31 @@ function updateUser($newUser){
         $query->bindParam(5, $newUser['user_id']);
         $query->execute();
 }
+
+// This function is used to perform custom
+// SQL queries related to users table
+
+function customUserQuery($sql, $params){
+        global $conn;
+        $query = $conn->prepare($sql);
+    
+        // Bind params
+    
+        $paramsTypes = [
+            'integer' => PDO::PARAM_INT,
+            'string' => PDO::PARAM_STR,
+            'boolean' => PDO::PARAM_BOOL
+        ];
+    
+        for($i = 0; $i < count($params); $i++)
+        {
+            $paramType = $paramsTypes[gettype($params[$i])];
+            $query->bindParam($i + 1, $params[$i], $paramType);
+        }
+    
+        $query->setFetchMode(PDO::FETCH_ASSOC);
+        $query->execute();
+        $result = $query->fetchAll();
+    
+        return $result;
+}

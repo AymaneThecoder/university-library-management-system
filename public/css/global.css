@@ -1,5 +1,11 @@
 
 
+
+/*
+    Some classes are prefixed with 'custom' in order to distinguish 
+    them from boostrtap classes
+*/
+
 /* Main */
 .main
 {
@@ -62,4 +68,19 @@ ul.documents li.document .cover
 .light-gray
 {
     background-color: rgb(250, 250, 250);
+}
+
+.custom-input-group > *
+{
+    border-radius: 0 !important;
+}
+.custom-input-group > *:first-child
+{
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+}
+.custom-input-group > *:last-child
+{
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
 }

@@ -116,7 +116,7 @@
             </div>
 
             <input class="btn btn-primary" type="submit" name="saveChanges" value="Sauvgarder">
-            <input class="btn btn-secondary" type="reset" value="Reinitialiser">
+            <input class="btn btn-secondary" type="reset"  value="Reinitialiser">
         </div>
       </form>
     </section>

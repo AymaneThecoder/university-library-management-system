@@ -6,21 +6,12 @@
                    <a class="navbar-brand" href="home.php">
                        <h2>jaliss</h2>
                    </a>
-                   <ul class="navbar-nav navbar-center column-gap-5">
-                       <li class="nav-item">
-                           <a href="#" class="nav-link active">Tous</a>
-                       </li>
-                       <li class="nav-item">
-                           <a href="#" class="nav-link">Articles</a>
-                       </li>
-                       <li class="nav-item">
-                           <a href="#" class="nav-link">Livres</a>
-                       </li>
-                       <li class="nav-item">
-                           <a href="#" class="nav-link">Periodiques</a>
-                       </li>
-                   </ul>
 
+                   <!-- nav links -->
+                    <?php
+                        require_once 'nav-links.php';
+                    ?>
+                   
                    <div class="account-dropdown dropdown">
                        <button class="btn dropdown-toggle" data-bs-toggle="dropdown">
                            <i class="fa fa-user"></i>

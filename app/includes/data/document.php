@@ -30,11 +30,12 @@ function getDocumentByID($id){
         return $document;
 }
 
-// Create custom SQL queries for 'document' table
+// This function is used to perform custom
+// SQL queries related to documents table
 
-function customDocumentQuery($command, $params){
+function customDocumentQuery($sql, $params){
     global $conn;
-    $query = $conn->prepare($command);
+    $query = $conn->prepare($sql);
 
     // Bind params
 
