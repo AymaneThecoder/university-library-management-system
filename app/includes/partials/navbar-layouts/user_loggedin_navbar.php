@@ -4,7 +4,7 @@
 
                        <!-- LOGO -->
                    <a class="navbar-brand" href="home.php">
-                       <h2>jaliss</h2>
+                       <h2>EST<span style="color: var(--secondary-color);">Lib</span></h2>
                    </a>
 
                    <!-- nav links -->
@@ -18,13 +18,13 @@
                        </button>
                        <div class="dropdown-menu dropdown-menu-end">
                            <li class="dropdown-item">
-                               <a href="userBorrows.php" class="borrows-btn text-dark text-decoration-none">Mes empruntes</a>
+                               <a href="userBorrows.php" class="borrows-btn text-dark text-decoration-none"><i class="fa fa-book"></i> Mes empruntes</a>
                            </li>
                            <li class="dropdown-item">
-                               <a href="account.php" class="logout-btn text-dark text-decoration-none">Mon compte</a>
+                               <a href="account.php" class="logout-btn text-dark text-decoration-none"><i class="fa fa-gear"></i> Mon compte</a>
                            </li>
                            <li class="dropdown-item">
-                               <a href="logout.php" class="logout-btn text-dark text-decoration-none">Se deconnecter</a>
+                               <a href="logout.php" class="logout-btn text-dark text-decoration-none"><i class="fa fa-sign-out"></i> Se deconnecter</a>
                            </li>
                        </div>
                    </div>

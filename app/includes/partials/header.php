@@ -12,5 +12,6 @@
     <link rel="stylesheet" href="http://localhost/management-of-library/public/css/footer.css?v=<?= time() ?>">
     <link rel="stylesheet" href="http://localhost/management-of-library/public/css/customProperties.css?v=<?= time() ?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <title>Document</title>

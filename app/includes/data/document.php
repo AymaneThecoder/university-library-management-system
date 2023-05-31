@@ -20,7 +20,9 @@ function getDocuments(){
 
 function getDocumentByID($id){
         global $conn;
-        $sql = 'select * from documents where id = ?';
+        $sql = 'SELECT d.*, t.name as type FROM documents d
+                LEFT JOIN doc_types t ON d.type_id=t.id
+                WHERE d.id = ?';
         $query = $conn->prepare($sql);
         $query->bindParam(1, $id);
         $query->execute();

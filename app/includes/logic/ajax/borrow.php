@@ -7,7 +7,10 @@ use Dompdf\Dompdf;
 require_once '../../data/user.php';
 require_once '../../data/document.php';
 require_once '../../data/borrow.php';
+require_once '../../../config/db.php';
 require_once dirname(__DIR__) . '/../../../vendor/autoload.php';
+
+$connection = getConnection();
 
 // The user is not loggedin
 
@@ -59,7 +62,7 @@ function isDocumentAvailable($doc_id) {
     return false;
   }
 
-  return $document['copiesLeft'] > 0;
+  return $document['copies_left'] > 0;
 }
 
 
@@ -74,14 +77,22 @@ function userCanBorrow($user_id){
 }
 
 function isDocumentAlreadyBorrowed($data){
+  global $connection;
 
   // Check if the document is not already borrowed and not returned by that user
-  $userId = $data['userID'];
-  $docId = $data['docID'];
+  $user_id = $data['userID'];
+  $doc_id = $data['docID'];
   
-  $borrow = getBorrowByPrimaryKeys($userId, $docId);
+  if($stmt = $connection->prepare('SELECT * from borrows WHERe user_id=? AND doc_id=? AND status NOT IN ("retourne", "refuse") '))
+  {
+    $stmt->bindParam(1, $user_id);
+    $stmt->bindParam(2, $doc_id);
+    $stmt->execute();
+    $borrows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-  return !empty($borrow);
+    return (count($borrows) > 0);
+  }
+
 }
 
 function createBorrow($data){
@@ -125,7 +136,7 @@ function generateBorrowReceipt($borrowData) {
 
   // Fill the template with borrow data
   $toReplace = ['{{ code }}', '{{ borrowDate }}', '{{ returnDate }}', '{{ fullName }}', '{{ title }}'];
-  $replaceWith = [$borrowData['borrowCode'], $borrowData['borrowDate'], $borrowData['returnDate'], $user['fullName'], $document['title']];
+  $replaceWith = [$borrowData['borrowCode'], $borrowData['borrowDate'], $borrowData['returnDate'], $user['full_name'], $document['title']];
   $html = str_replace($toReplace, $replaceWith, $html);
   $receiptPdf->loadHtml($html);
   $receiptPdf->render();

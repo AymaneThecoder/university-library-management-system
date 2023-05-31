@@ -47,22 +47,22 @@ require_once '../app/includes/partials/header.php';
             <div class="row">
                 <div class="col-md-3">
                     <div class="cover">
-                        <img src="../public/assets/uploads/book_covers/<?= $document['coverImgPath'] ?>" alt="">
+                        <img src="http://localhost/management-of-library/admin/dashboard/assets/images/uploads/doc_images/<?= $document['doc_img'] ?>" alt="">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="wrapper">
                         <div class="description-container">
-                            <h4>Resume</h4>
-                            <p class="description"><?= $document['summary'] ?></p>
+                            <h4>description</h4>
+                            <p class="description"><?= $document['doc_desc'] ?></p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="details">
                      <p class="author"><span style="font-weight: bold;">Auteur: </span><?= $document['author'] ?></p>
-                     <p class="page_count"><span style="font-weight: bold;">Nombre de page: </span><?= $document['pageCount'] ?></p>
-                     <p class="doc_type"><span style="font-weight: bold;">Type de document: </span><?= $document['docType'] ?></p>
+                     <p class="page_count"><span style="font-weight: bold;">Nombre de page: </span><?= $document['page_count'] ?></p>
+                     <p class="doc_type"><span style="font-weight: bold;">Type de document: </span><?= $document['type'] ?></p>
                      <input type="hidden" value="<?= $document['id'] ?>" name="docID">
                     </div>
                 </div>
@@ -77,8 +77,8 @@ require_once '../app/includes/partials/header.php';
   require_once  '../app/includes/partials/footer.php';
 ?>
 
-<script src="./js/ajax/borrow.js?v=8"></script>
+<script src="./js/ajax/borrow.js?v=<?= time(); ?>"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-<script src="http://localhost/management-of-library/app/js/main.js?v=3"></script>
+<script src="http://localhost/management-of-library/app/public/js/main.js?v=<?= time(); ?>"></script>
 </body>
 </html>

@@ -28,29 +28,20 @@
 
 		// Validate user data
 
-		$validationResponse = validateUserData($data, [
+		$errors = validateUserData($data, [
 			'full_name' => ['required', 'fullName'],
-			'email' => ['required', 'email'],
-			'major' => ['required'],
-			'password' => ['required', 'min:8'],
-			'confirm_password' => ['required', 'confirmed']
+			'email' => ['required', 'email', 'unique:users'],
+			'branch' => ['required'],
+			'tele' => ['phone'],
+			'password' => ['required', 'min:8', 'confirmed']
 		]);
 		
 		// There is error in form
 
-		if($validationResponse != 'validated')
+		if(count($errors) > 0)
 		{
-			return $validationResponse;
+			return $errors;
 		}
-
-		// Check if the email is already taken 
-
-		$user = getUserByIDOrEmail($data['email']);
-
-        if($user != NULL)
-		{
-            return "Email deja existe";
-        }
 
 		// Hash the password
 		$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
@@ -70,30 +61,35 @@
 
 		// Validate user data
 
-		$response = validateUserData($data, [
+		$errors = validateUserData($data, [
 			'email' => ['required', 'email'],
 			'password' => ['required']
 		]);
 
-		if($response != 'validated')
+		if(count($errors) > 0)
 		{
-			return $response;
+			return $errors;
 		}
+
+		$errors['loginError'] = [];
 
 	    $user = getUserByIDOrEmail($data['email']);
    
 		// Check for invalid login
 		if($user == NULL){
-			return "erreur dans email ou password";
+			array_push($errors['loginError'], "erreur dans email");
+			return $errors;
 		}
 
 		if(!password_verify($data['password'], $user['password'])){
-			return "Le mot de passe est incorrecte!";
-		}else{
-		    session_start();
-			$_SESSION["user_id"] = $user['userId'];
-			redirect('home', []);
+			array_push($errors['loginError'], "mot de passe incorrecte");
+			return $errors;
 		}
+
+		session_start();
+		$_SESSION["user_id"] = $user['id'];
+		redirect('home', []);
+
 	}
 
 
@@ -106,9 +102,9 @@
 
 		// Validate user data
 
-		$validationResponse = validateUserData($data, [
+		$errors = validateUserData($data, [
 			'full_name' => ['required', 'fullName'],
-			'email' => ['required', 'email'],
+			'email' => ['required', 'email', 'unique:users:' . $_SESSION['user_id']],
 			'major' => ['required'],
 			'password' => ['required', 'min:8'],
 			'confirm_password' => ['required', 'confirmed']
@@ -116,19 +112,10 @@
 		
 		// There is error in form
 
-		if($validationResponse != 'validated')
+		if(count($errors) > 0)
 		{
-			return $validationResponse;
+			return $errors;
 		}
-
-		// Check if the email is already taken 
-		$currentUser = getUserByIDOrEmail($_SESSION['user_id']);
-		$user = getUserByIDOrEmail($data['email']);
-
-        if($user != NULL && $user['email'] != $currentUser['email'])
-		{
-            return "Email deja existe";
-        }
 
 		// Hash the password
 		$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
@@ -259,12 +246,6 @@
 
 	function getUserBorrows($userId){
 		$borrows = getBorrowsByUserID($userId);
-
-		// Add the document title to the borrow row
-		foreach($borrows as &$borrow){
-			$borrowedDocument = getDocumentByID($borrow['docId']);
-			$borrow['docTitle'] =  $borrowedDocument['title'];
-		}
 		
 		return $borrows;
 	}

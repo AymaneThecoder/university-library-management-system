@@ -1,6 +1,6 @@
 :root
 {
-    --color-primary: darkgreen;
-    --secondary-color: rgb(9, 184, 9);
-    --color-dark: rgb(5, 65, 5);
+    --color-primary: rgb(100, 40, 0);
+    --secondary-color: rgb(156, 67, 7);
+    /* --color-dark: rgb(5, 65, 5); */
 }

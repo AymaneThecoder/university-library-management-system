@@ -10,7 +10,8 @@ like (the burger menu navbar, Filtering documents) and others.                  
 
 $(function () {
 
-
+// Initialize datatable
+$('.datatable').DataTable();
 
 /* Burger menu navbar show / hide */
 

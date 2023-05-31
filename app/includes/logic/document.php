@@ -22,7 +22,7 @@ function search() {
 
     if($docType)
     {
-        $filters[] = "docType = ?";
+        $filters[] = "t.name = ?";
         array_push($sqlParams, $docType);
     }    
 

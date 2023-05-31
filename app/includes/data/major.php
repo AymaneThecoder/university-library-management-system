@@ -6,7 +6,7 @@ $conn = getConnection();
 
 function getMajors(){
         global $conn;
-        $sql = 'select * from majors';
+        $sql = 'SELECT * FROM branches';
         $query = $conn->prepare($sql);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);

@@ -7,7 +7,7 @@
 
 	if(isset($_POST['submit'])){
         unset($_POST['submit']);
-		$response = loginUser($_POST);
+		$errors = loginUser($_POST);
 	}
 
 // Header
@@ -31,14 +31,16 @@ require_once '../app/includes/partials/header.php';
 
                     <div class="signin-form">
                         <h2 class="form-title">Se connecter</h2>
-                          <p class="<?= @$responseStatus == "success" ? 'text-success' : 'text-danger' ?>" > <?php echo @$response; ?> </p>
+                            <p class="text-danger"><?= @$errors['loginError'][0] ?></p>
                             <div class="form-group">
                                 <label for="your_name"><i class="fa fa-user"></i></label>
                                 <input type="text"  id="your_name" placeholder="Email" name="email" value="<?php echo @$_POST['email']; ?>"/>
+                                <p class="text-danger"><?= @$errors['email'][0] ?></p>
                             </div>
                             <div class="form-group">
                                 <label for="your_pass"><i class="fa fa-lock"></i></label>
                                 <input type="password" id="your_pass" placeholder="Password" name="password" value="" />
+                                <p class="text-danger"><?= @$errors['password'][0] ?></p>
                             </div>
                             <div class="form-group">
                                 <input type="checkbox" name="remember-me" id="remember-me"/>

@@ -5,7 +5,9 @@ require_once '../app/includes/data/document.php';
 
 // Show just 9 documents in home page
 
-$sql = 'select * from documents limit ?,?';
+$sql = 'SELECT d.*, t.name as type FROM documents d
+        LEFT JOIN doc_types t ON d.type_id=t.id
+        LIMIT ?,?';
 $documents = customDocumentQuery($sql, [0, 9]);
 
 
@@ -37,7 +39,7 @@ require_once '../app/includes/partials/header.php';
                     <div class="search-documents-container fixed">
                         <form action="http://localhost/management-of-library/public/search.php" method="get">
                             <div class="input-group">
-                                <input class="search-input form-control form-control-lg" type="text" name="search-query" id="" placeholder="chercher par titre ou auteur">
+                                <input class="search-input form-control form-control-lg" type="text" name="search_query" id="" placeholder="chercher par titre ou auteur">
                                 <button class="search-btn btn">
                                     <i class="fa fa-search"></i>
                                 </button>
@@ -72,17 +74,17 @@ require_once '../app/includes/partials/header.php';
 
          foreach($documents as $doc):
          ?>
-            <li class="document col-md-6 col-lg-4 mb-5" data-document-type=<?= $doc['docType'] ?>>
+            <li class="document col-md-6 col-lg-4 mb-5" data-document-type=<?= $doc['type'] ?>>
               <a class="text-decoration-none text-dark" href="document.php?doc_id=<?= $doc['id'] ?>">
                <div class="row justify-content-center">
                     <div class="col-12 cover mb-3">
-                        <img src="../public/assets/uploads/book_covers/<?= $doc['coverImgPath'] ?>" alt="">
+                        <img src="http://localhost/management-of-library/admin/dashboard/assets/images/uploads/doc_images/<?= $doc['doc_img'] ?>" alt="">
                     </div>
                     <div class="col-12 document-info">
                         <p class="title text-center mb-3"><?= $doc['title'] ?></p>
                         <div class="px-2 d-flex justify-content-between align-items-center">
                             <p class="author mb-0"><?= $doc['author'] ?></p>
-                             <h5 class="document-type"><?= $doc['docType'] ?></h5>
+                             <h5 class="document-type"><?= $doc['type'] ?></h5>
                         </div>
                     </div>
                 </div>

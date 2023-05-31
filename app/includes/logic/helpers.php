@@ -3,7 +3,10 @@
 use PHPMailer\PHPMailer\PHPMailer;
 
 require dirname(__DIR__) . '/../../vendor/autoload.php';
+require_once dirname(__DIR__) . '../../config/db.php';
 
+
+$connection = getConnection();
 
 // Redirect to another page
 
@@ -52,38 +55,49 @@ function sanitizeUserData(&$data){
 
 function validateUserData($data, $rules){
 
-    $error = '';
+    $errors = [];
 
     foreach($data as $input => $val)
 	{
+
+		if(!isset($rules[$input]))
+		{
+			continue;
+		}
+
 		// Get the rules array
 		$inputRules = $rules[$input];
-        
-		// Get the human readable input name like from 'full_name' to 'full name' 
-		// And also the french translation
-		// NOTE: you can skip this part and in the checkRule function
-		// you call it with 'input' variable instead of 'inputName'
-
-		$inputName = getInputName($input);
 
 		foreach($inputRules as $rule)
 		{
-			$error = checkRule($inputName, $val , $rule);
-
-			// Return the error when the first one found
-			if(!empty($error))
+			if(checkRule($input, $val, $rule))
 			{
-				return $error;
+				// If it's the first error intiliaize the array
+				// otherwise push to the array
+
+				if(!isset($errors[$input]))
+				{
+					$errors[$input] = [];
+				}
+
+				array_push($errors[$input], checkRule($input, $val, $rule));
 			}
 		}
 	}
 
-	// The form is valid
-
-	return 'validated';
+	return $errors;
 }
 
 function checkRule($inputName, $value, $rule){
+
+	global $connection;
+
+	// Get the human readable input name like from 'full_name' to 'full name' 
+	// And also the french translation
+	// NOTE: you can skip this part and in the checkRule function
+	// you call it with 'inputName' variable instead of 'translatedInputName'
+
+	$translatedInputName = getInputName($inputName);
 
 	// Rules which you can modify(add/edit/remove)
 
@@ -95,7 +109,7 @@ function checkRule($inputName, $value, $rule){
 		case 'required': {
 			if(empty($value) || str_starts_with($value, 'choisi'))
 			{
-				return 'Tous les champs sont obligatoires!';
+				return "$translatedInputName est obligatoires!";
 			}
 		} break;
 
@@ -107,6 +121,30 @@ function checkRule($inputName, $value, $rule){
 				return 'email doit etre valid!';
 			}
 		} break;
+
+		// Unique
+
+		case str_starts_with($rule, 'unique'): {
+			$splitRule = explode(':', $rule);
+			$table = $splitRule[1];
+			$idToIgnore = $splitRule[2] ?? true;
+			$column = $inputName;
+			
+			$sql = "SELECT * FROM $table WHERE $column  = ? and id != ?";
+		
+			if($stmt = $connection->prepare($sql))
+			{
+				$table = $table;
+				$stmt->bindParam(1, $value);
+				$stmt->bindParam(2, $idToIgnore);
+
+				$stmt->execute();
+				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+				return count($result) > 0 ? "$translatedInputName dèja existe!" : '';
+			}
+
+		} break;
 		
 
 		// Minimun number of characters
@@ -117,7 +155,25 @@ function checkRule($inputName, $value, $rule){
 
 			if(strlen($value) < $length)
 			{
-				return "$inputName ne peut pas etre moins d'un $length characteres!";
+				return "$translatedInputName ne peut pas etre moins d'un $length characteres!";
+			}
+		} break;
+
+		// File types
+		
+		case str_starts_with($rule, 'ftypes'): {
+			
+			if(!$value['name'])
+			{
+				break;
+			}
+
+			$acceptedExts = explode(',', explode(':', $rule)[1]);
+			$fileExt = explode('.', $value['name'])[1];
+
+			if(!in_array($fileExt, $acceptedExts))
+			{
+				return "$translatedInputName doit etre de type: " . implode(',', $acceptedExts);
 			}
 		} break;
 
@@ -129,7 +185,7 @@ function checkRule($inputName, $value, $rule){
 
 			if(strlen($value) > $length)
 			{
-				return "$inputName ne peut pas etre plus d'un $length characteres!";
+				return "$translatedInputName ne peut pas etre plus d'un $length characteres!";
 			}
 		} break;
 
@@ -145,13 +201,25 @@ function checkRule($inputName, $value, $rule){
 		// Password confirmation
 
 		case 'confirmed': {
-			$password = htmlspecialchars($_POST['password']);
+			$password = htmlspecialchars($_POST['password_confirm']);
 			if($value != $password)
 			{
 				return 'Les mot de passes ne sont pas authentique!';
 			}
 		} break;
+
+		// Phone number
+		// NOTE: this validation only works on Morrocan phone numbers
+
+		case 'phone': {
+			if(!preg_match('/^0(6|7)[0-9]{8}$/', $value))
+            {
+                return "$translatedInputName n'est pas valid";
+            } 
+		} break;
 	}
+
+	return null;
 	
 }
 
@@ -162,7 +230,15 @@ function getInputName($input) {
 	$toFrench = [
 		'password' => 'mot de passe',
 		'full name' => 'nom complet',
-		'major' => 'filiere'
+		'branch' => 'filiere',
+		'name' => 'nom',
+		'phone number' => 'telephone',
+		'title' => 'titre',
+		'doc desc' => 'description',
+		'page count' => 'nombre de page',
+		'doc img' => 'image',
+		'author' => 'auteur',
+		'copies left' => 'nombre de copies'
 	];
 
 	$inputNameFormatted = formatInputName($input);
@@ -194,7 +270,7 @@ function formatInputName($name) {
 function sendEmail($options){
 	$mail = new PHPMailer();
 
-	$mail->setFrom('ajaraiayoub@gmail.com');
+	$mail->setFrom('email');
 	$mail->addAddress($options['to']);
 	$mail->Subject = $options['subject'] ?? '';
 	$mail->isHTML();
@@ -203,7 +279,7 @@ function sendEmail($options){
 	$mail->isSMTP();
 	$mail->Host = "smtp.gmail.com";
 	$mail->SMTPAuth = true;
-	$mail->Username = "username";
+	$mail->Username = "email";
 	$mail->Password = "password";
 	$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 	$mail->Port = 587;
@@ -219,8 +295,9 @@ function paginate($nbrItemsPerPage, $table, $filtersString = '', $sqlParams = []
 	$queryFn = getQueryFunctionName($table);
 
 	// Count items
-	$countSql = 'select count(*) as total from ';
-	$countSql .= $table;
+	$countSql = 'SELECT count(d.id) as total from documents d
+				LEFT JOIN doc_types t ON d.type_id=t.id';
+	// $countSql .= $table;
 	$countSql .= $filtersString;
 
 	$countResult = $queryFn($countSql, $sqlParams);
@@ -233,7 +310,7 @@ function paginate($nbrItemsPerPage, $table, $filtersString = '', $sqlParams = []
 
     array_push($sqlParams, $startOffset, $nbrItemsPerPage);
 
-	$getSql = str_replace('count(*) as total', '*', $countSql);
+	$getSql = str_replace('count(d.id) as total', 'd.*, t.name as type', $countSql);
     $getSql .= ' limit ?,?';
 
 	// Get items

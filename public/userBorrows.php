@@ -10,7 +10,7 @@
 
     if(!isset($user_id))
     {
-        redirect('login', ['name' => 'ayoub', 'age' => 56]);
+        redirect('login', []);
     }
 
     // Header
@@ -47,7 +47,7 @@
         if(count($borrows) > 0):
         ?>
 
-        <table class="docs table align-middle bg-white px-4">
+        <table class="docs table datatable align-middle bg-white px-4">
 
         <!-- Table head -->
             <thead>
@@ -55,6 +55,7 @@
                 <th>Titre du document</th>
                 <th>Date d'emprunte</th>
                 <th>Date de retour</th>
+                <th>Status</th>
                 <th>Imprimer</th>
             </thead>
 
@@ -66,12 +67,25 @@
             foreach($borrows as $borrow):
             ?>
                 <tr>
-                    <td><?= $borrow['code'] ?></td>
-                    <td class="doc-title"><?= $borrow['docTitle'] ?></td>
-                    <td><?= $borrow['borrowDate'] ?></td>
-                    <td><?= $borrow['returnDate'] ?></td>
+                    <td><?= $borrow['borrow_code'] ?></td>
+                    <td class="doc-title"><?= $borrow['title'] ?></td>
+                    <td><?= $borrow['borrow_date'] ?></td>
+                    <td><?= $borrow['return_date'] ?></td>
                     <td>
-                        <a download href="<?= $borrow['receiptFileUrl'] ?>" class="btn btn-sm btn-primary">
+                        <?php
+                            if(in_array($borrow['status'], ['active', 'retourne']))
+                            {
+                                $badgeColor = 'success';
+                            } elseif($borrow['status'] == 'en cours') {
+                                $badgeColor = 'secondary';
+                            } else {
+                                $badgeColor = 'danger';
+                            }
+                        ?>
+                        <span class="badge bg-<?= $badgeColor ?>"><?= $borrow['status'] == 'en cours' ? 'traitement' : $borrow['status'] ?></span>
+                    </td>
+                    <td>
+                        <a download href="<?= $borrow['receipt_file'] ?>" class="btn btn-sm btn-primary">
                             <i class="fa fa-print" style="font-size: 1.1rem !important;"></i>
                         </a>
                     </td>
@@ -97,7 +111,8 @@
   require_once  '../app/includes/partials/footer.php';
 ?>
 
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-<script src="http://localhost/management-of-library/app/js/main.js?v=3"></script>
+<script src="http://localhost/management-of-library/public/js/main.js?v=<?= time(); ?>"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
             <div class="container">
                     <a href="http://localhost/management-of-library/public/home.php" class="navbar-brand">
                         <h3>
-                            jaliss
+                            ESTLib
                         </h3>
                     </a>
                 <div class="navbar-right">

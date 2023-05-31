@@ -13,23 +13,22 @@ define('MAX_BORROWS', 3);
 function addUser($data){
         global $conn;
 
-        $sql = 'insert into users values (?, ?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO users(full_name, email, branch_id, borrows_left, password, phone_number) values (?, ?, ?, ?, ?, ?)';
 
         $query = $conn->prepare($sql);
-        $id = null;
         $maxBorrows = MAX_BORROWS;
-        $query->bindParam(1, $id);
-        $query->bindParam(2, $data['full_name']);
-        $query->bindParam(3, $data['email']);
-        $query->bindParam(4, $data['major']);
-        $query->bindParam(5, $maxBorrows);
-        $query->bindParam(6, $data['password']);
+        $query->bindParam(1, $data['full_name']);
+        $query->bindParam(2, $data['email']);
+        $query->bindParam(3, $data['branch_id']);
+        $query->bindParam(4, $maxBorrows);
+        $query->bindParam(5, $data['password']);
+        $query->bindParam(6, $data['tele']);
         $query->execute();
 }
 
 function getUserByIDOrEmail($findBy){
         global $conn;
-        $sql = 'select * from users where userId = ? OR email = ?';
+        $sql = 'SELECT * FROM users WHERE id = ? OR email = ?';
         $query = $conn->prepare($sql);
         $query->bindParam(1, $findBy);
         $query->bindParam(2, $findBy);
@@ -41,12 +40,12 @@ function getUserByIDOrEmail($findBy){
 function updateUser($newUser){
         global $conn;
 
-        $sql = 'update users set fullName = ?, email = ?, majorId = ?, password = ? where userId = ?';
+        $sql = 'update users set full_name = ?, email = ?, branch_id = ?, password = ? where id = ?';
 
         $query = $conn->prepare($sql);
         $query->bindParam(1, $newUser['full_name']);
         $query->bindParam(2, $newUser['email']);
-        $query->bindParam(3, $newUser['major']);
+        $query->bindParam(3, $newUser['branch']);
         $query->bindParam(4, $newUser['password']);
         $query->bindParam(5, $newUser['user_id']);
         $query->execute();

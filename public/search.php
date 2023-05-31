@@ -1,6 +1,9 @@
 <?php
 session_start();
 require_once '../app/includes/logic/document.php';
+require_once '../app/config/db.php';
+
+$connection = getConnection();
 
 $dataReturned = search();
 
@@ -43,11 +46,28 @@ require_once '../app/includes/partials/header.php';
                         <div class="search-form-container ms-auto w-50">
                             <form action="<?= $_SERVER['REQUEST_URI'] ?>" class="">
                                 <div class="d-flex custom-input-group">
+
+                                    <?php
+                                        if($stmt =  $connection->prepare('SELECT * FROM doc_types'))
+                                        {
+                                            $stmt->execute();
+                                            $doc_types = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        }
+                                    ?>
+
                                     <select name="doc_type" id="" class="form-select rounded-left" style="width: 120px;">
                                         <option value="">Tous</option>
-                                        <option value="article" <?= @$_GET['doc_type'] == 'article' ? 'selected' : '' ?>>Articles</option>
-                                        <option value="livre" <?= @$_GET['doc_type'] == 'livre' ? 'selected' : '' ?>>Livres</option>
-                                        <option value="periodique" <?= @$_GET['doc_type'] == 'periodique' ? 'selected' : '' ?>>Periodiques</option>
+
+                                        <?php
+                                        foreach($doc_types as $doc_type):
+                                            ?>
+
+                                        <option value="<?= $doc_type['name'] ?>" <?= strtolower(@$_GET['doc_type']) == strtolower($doc_type['name']) ? 'selected' : '' ?>><?= $doc_type['name'] ?></option>
+
+                                        <?php
+                                        endforeach;
+                                        ?>
+
                                     </select>
                                     <input class="form-control" type="text" name="search_query" id="" value="<?= @$_GET['search_query'] ?>" placeholder="Titre ou auteur">
                                     <button class="search-btn btn btn-primary">
@@ -61,7 +81,7 @@ require_once '../app/includes/partials/header.php';
                     <?php
                     if($q):
                     ?>
-                    <h6 class="resul-query mt-5" >Resultat pour: <span style="color: green;"><?= $q ?></span></h6>
+                    <h6 class="resul-query mt-5" >Resultat pour: <span style="color: var(--color-primary);"><?= $q ?></span></h6>
                     <?php
                     endif;
                     ?>
@@ -77,17 +97,17 @@ require_once '../app/includes/partials/header.php';
                     {
                     foreach($documents as $doc):
                     ?>
-                        <li class="document col-md-6 col-lg-4 mb-5" data-document-type=<?= $doc['docType'] ?>>
+                        <li class="document col-md-6 col-lg-4 mb-5" data-document-type=<?= $doc['type'] ?>>
                         <a class="text-decoration-none text-dark" href="document.php?doc_id=<?= $doc['id'] ?>">
                         <div class="row justify-content-center">
                                 <div class="col-12 cover mb-3">
-                                    <img src="../public/assets/uploads/book_covers/<?= $doc['coverImgPath'] ?>" alt="">
+                                    <img src="http://localhost/management-of-library/admin/dashboard/assets/images/uploads/doc_images/<?= $doc['doc_img'] ?>" alt="">
                                 </div>
                                 <div class="col-12 document-info">
                                     <p class="title text-center mb-3"><?= $doc['title'] ?></p>
                                     <div class="px-2 d-flex justify-content-between align-items-center">
                                         <p class="author mb-0"><?= $doc['author'] ?></p>
-                                        <h5 class="document-type"><?= $doc['docType'] ?></h5>
+                                        <h5 class="document-type"><?= $doc['type'] ?></h5>
                                     </div>
                                 </div>
                             </div>

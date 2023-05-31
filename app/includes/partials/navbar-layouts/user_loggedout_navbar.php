@@ -4,7 +4,7 @@
             <div class="container py-2 px-3 px-sm-0">
                        <!-- LOGO -->
                    <a class="navbar-brand" href="home.php">
-                       <h2>jaliss</h2>
+                   <h2>EST<span style="color: var(--secondary-color);">Lib</span></h2>
                    </a>
 
                   <!-- nav links -->
