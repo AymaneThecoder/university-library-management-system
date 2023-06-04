@@ -119,14 +119,14 @@
               <div class="col">
                   <div class="form-group">
                   <label for="name">Pages</label>
-                  <input type="number"  name="page_count" class="form-control" id="titre" required>
+                  <input type="number" min="0" onkeypress="return event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57)" name="page_count" class="form-control" id="titre" required>
                   <div class="input-error text-danger" data-input="page_count"></div>
                 </div>
               </div>
               <div class="col">
                   <div class="form-group">
                   <label for="name">Copies</label>
-                  <input type="number"  name="copies_left" class="form-control" id="titre" required>
+                  <input type="number" min="0" onkeypress="return event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57)" name="copies_left" class="form-control" id="titre" required>
                   <div class="input-error text-danger" data-input="copies_left"></div>
                 </div>
               </div>
